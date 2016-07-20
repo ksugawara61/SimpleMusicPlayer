@@ -1,139 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="org.example.simplemusicplayer.MainActivity">
 
-    <LinearLayout
-        android:orientation="horizontal"
+    <fragment
+        android:id="@+id/main_fragment"
+        class="org.example.simplemusicplayer.MainFragment"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="2">
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        tools:layout="@layout/fragment_main" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="1"
-            android:textSize="22sp"
-            android:textColor="#fff"
-            android:gravity="center"
-            android:background="#0000ff" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="2"
-            android:textSize="22sp"
-            android:textColor="#fff"
-            android:gravity="center"
-            android:background="#00ff00"
-            android:layout_weight="3" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="3"
-            android:textSize="22sp"
-            android:textColor="#fff"
-            android:gravity="center"
-            android:background="#aa0000"
-            android:layout_weight="1" />
-
-    </LinearLayout>
-
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="10"
-        android:id="@+id/imageView" />
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="2">
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="Playlist"
-            android:id="@+id/bt_list" />
-
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="6">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="タイトル"
-                android:textSize="22sp"
-                android:textColor="#fff"
-                android:background="#0000ff" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="アーティスト・アルバム"
-                android:textSize="22sp"
-                android:textColor="#fff"
-                android:background="#00bbff" />
-
-        </LinearLayout>
-    </LinearLayout>
-
-    <SeekBar
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:progress="0"
-        android:max="100"
-        android:id="@+id/SeekBar" />
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="2">
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="Roop"
-            android:id="@+id/bt_roop" />
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="Prev"
-            android:id="@+id/bt_prev" />
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="Start"
-            android:id="@+id/bt_stat" />
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="Next"
-            android:id="@+id/bt_next" />
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="Rand"
-            android:id="@+id/bt_rand" />
-    </LinearLayout>
-
-</LinearLayout>
+</FrameLayout>
