@@ -109,13 +109,13 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="Roop"
-            android:id="@+id/bt_roop" />
+            android:id="@+id/roop_button" />
         <Button
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="Prev"
-            android:id="@+id/bt_prev" />
+            android:id="@+id/prev_button" />
         <Button
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -127,13 +127,13 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="Next"
-            android:id="@+id/bt_next" />
+            android:id="@+id/next_button" />
         <Button
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="Rand"
-            android:id="@+id/bt_rand" />
+            android:id="@+id/rand_button" />
     </LinearLayout>
 
 </LinearLayout>
