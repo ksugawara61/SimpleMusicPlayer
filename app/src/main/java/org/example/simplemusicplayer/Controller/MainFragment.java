@@ -1,4 +1,4 @@
-package org.example.simplemusicplayer;
+package org.example.simplemusicplayer.Controller;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -6,6 +6,8 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import org.example.simplemusicplayer.R;
 
 /**
  * Created by katsuya on 16/07/21.

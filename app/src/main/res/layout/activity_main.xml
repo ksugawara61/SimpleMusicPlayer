@@ -4,11 +4,11 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="org.example.simplemusicplayer.MainActivity">
+    tools:context=".Controller.MainActivity">
 
     <fragment
         android:id="@+id/main_fragment"
-        class="org.example.simplemusicplayer.MainFragment"
+        class="org.example.simplemusicplayer.Controller.MainFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
