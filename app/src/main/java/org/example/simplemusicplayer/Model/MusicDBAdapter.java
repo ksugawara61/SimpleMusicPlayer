@@ -7,6 +7,8 @@ import android.os.Environment;
 import android.util.Log;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -39,6 +41,7 @@ public class MusicDBAdapter {
     public void insertMusic() {
         File test = new File("/storage/sdcard1/music");
         List<File> music = searchMusicFiles(test);
+        insertMusicFiles(music);
     }
 
     /**
@@ -56,7 +59,7 @@ public class MusicDBAdapter {
 
         // ルートディレクトリを再帰的に探索し音楽ファイル一覧を取得
         for (File file : files) {
-            Log.d(TAG, "test " + file.getAbsolutePath());
+            Log.d(TAG, file.getAbsolutePath());
 
             // ファイルがディレクトリの場合再帰的に探索
             if (file.isDirectory()) {
@@ -70,4 +73,32 @@ public class MusicDBAdapter {
     /**
      * 音楽ファイルをDBに格納
      */
+    private void insertMusicFiles(List<File> music) {
+        for (File file : music) {
+            Log.d(TAG, file.getAbsolutePath());
+
+            try {
+                // DBに挿入する値を取得
+                FileInputStream in = new FileInputStream(file);
+                FileChannel channel = in.getChannel();
+                channel.position(channel.size() - 128);
+                byte[] w = new byte[128];
+
+                in.read(w);
+
+                String title = new String(w, 3, 30, "Shift_JIS").replaceAll("'", "\"");
+                String artist = new String(w, 33, 30, "Shift_JIS").replaceAll("'", "\"");
+                String album = new String(w, 63, 30, "Shift_JIS").replaceAll("'", "\"");
+
+                Log.d(TAG, title.trim());
+                Log.d(TAG, artist.trim());
+                Log.d(TAG, title.trim());
+            }
+            catch (Exception e) {
+                Log.e(TAG, e.toString());
+            }
+
+            //db.insert
+        }
+    }
 }
