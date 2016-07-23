@@ -10,7 +10,7 @@ public class MusicFileFilter implements FilenameFilter {
 
     // ファイルリストから取得する音楽ファイルの拡張子
     private final String MUSIC_EXTENSION_MP3 = "mp3";
-    private final String MUSIC_EXTENSION_M4A = "m4a";
+    //private final String MUSIC_EXTENSION_M4A = "m4a";
 
     /**
      * 音楽ファイルか判定
@@ -23,9 +23,9 @@ public class MusicFileFilter implements FilenameFilter {
         if (filename.endsWith(MUSIC_EXTENSION_MP3)) {
             return true;
         }
-        else if (filename.endsWith(MUSIC_EXTENSION_M4A)) {
+        /*else if (filename.endsWith(MUSIC_EXTENSION_M4A)) {
             return true;
-        }
+        }*/
 
         return false;
     }

@@ -3,10 +3,12 @@ package org.example.simplemusicplayer.Controller;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.example.simplemusicplayer.Model.MusicDBAdapter;
 import org.example.simplemusicplayer.R;
 
 /**
@@ -14,11 +16,20 @@ import org.example.simplemusicplayer.R;
  */
 public class MainFragment extends Fragment {
 
+    private final static String TAG = "MainFragment";
     private AlertDialog m_dialog;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                             Bundle savedInstanceState) {
+
+        MusicDBAdapter adapter = new MusicDBAdapter(getContext(), "simplemusicplayer.db", null, 1);
+        try {
+            adapter.insertMusic();
+        }
+        catch (Exception e) {
+            Log.e(TAG, e.toString());
+        }
 
         View root_view = inflater.inflate(R.layout.fragment_main, container, false);
 

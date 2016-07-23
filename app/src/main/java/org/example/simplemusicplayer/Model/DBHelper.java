@@ -22,8 +22,8 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String TABLE_PLAYLIST_MAP = "playlist_map";
 
     // テーブル生成用SQL
-    private static final String CREATE_TABLE_MUSIC = "create table "
-            + TABLE_MUSIC + " if not exists ("
+    private static final String CREATE_TABLE_MUSIC = "create table if not exists "
+            + TABLE_MUSIC + " ("
             + "music_id" + " integer primary key autoincrement not null, "
             + "music_name" + " text not null, "
             + "music_path" + " text not null"
