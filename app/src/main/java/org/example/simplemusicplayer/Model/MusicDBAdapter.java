@@ -1,9 +1,9 @@
 package org.example.simplemusicplayer.Model;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
-import android.os.Environment;
 import android.util.Log;
 
 import java.io.File;
@@ -21,7 +21,8 @@ import java.util.List;
  */
 public class MusicDBAdapter {
 
-    private static String TAG = "MusicDBAdapter";
+    private static final String TAG = "MusicDBAdapter";
+    private static final String TABLE_MUSIC = "music";
     private SQLiteDatabase db;
 
     /**
@@ -59,8 +60,6 @@ public class MusicDBAdapter {
 
         // ルートディレクトリを再帰的に探索し音楽ファイル一覧を取得
         for (File file : files) {
-            Log.d(TAG, file.getAbsolutePath());
-
             // ファイルがディレクトリの場合再帰的に探索
             if (file.isDirectory()) {
                 music.addAll(searchMusicFiles(file));
@@ -75,7 +74,6 @@ public class MusicDBAdapter {
      */
     private void insertMusicFiles(List<File> music) {
         for (File file : music) {
-            Log.d(TAG, file.getAbsolutePath());
 
             try {
                 // DBに挿入する値を取得
@@ -90,9 +88,17 @@ public class MusicDBAdapter {
                 String artist = new String(w, 33, 30, "Shift_JIS").replaceAll("'", "\"");
                 String album = new String(w, 63, 30, "Shift_JIS").replaceAll("'", "\"");
 
-                Log.d(TAG, title.trim());
-                Log.d(TAG, artist.trim());
-                Log.d(TAG, title.trim());
+                // レコードに格納するパラメータを付与
+                ContentValues values = new ContentValues();
+                values.put("music_name", title);
+                values.put("music_path", file.getAbsolutePath());
+
+                // 既にDBに登録されているレコードか確認し、登録されていない場合新規追加
+                String[] where_args = {title};
+                int update_num = db.update(TABLE_MUSIC, values, "music_name = ?", where_args);
+                if (update_num == 0) {
+                    db.insert(TABLE_MUSIC, "", values);
+                }
             }
             catch (Exception e) {
                 Log.e(TAG, e.toString());
