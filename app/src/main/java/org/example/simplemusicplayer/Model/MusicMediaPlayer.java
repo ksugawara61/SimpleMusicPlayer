@@ -14,44 +14,34 @@ import android.widget.Toast;
  */
 public class MusicMediaPlayer extends Service
 {
-    private static final String TAG = "MusicMediaPlayer";
-
-    @Override
-    public void onCreate() {
-        Log.i(TAG, "onCreate");
-        Toast.makeText(this, "MyService#onCreate", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.i(TAG, "onStartCommand Received start id " + startId + ": " + intent);
-        Toast.makeText(this, "MyService#onStartCommand", Toast.LENGTH_SHORT).show();
-        //明示的にサービスの起動、停止が決められる場合の返り値
-        return START_STICKY;
-    }
-
-    @Override
-    public void onDestroy() {
-        Log.i(TAG, "onDestroy");
-        Toast.makeText(this, "MyService#onDestroy", Toast.LENGTH_SHORT).show();
-    }
 
     /**
      * サービスに接続するためのバインダーの生成
      */
     public class MusicBinder extends Binder {
         //サービスの取得
-        MusicMediaPlayer getService() {
+        public MusicMediaPlayer getService() {
             return MusicMediaPlayer.this;
         }
     }
 
-    // Binderの生成
-    private final IBinder m_binder = new MusicBinder();
+
+    private static final String TAG = "MusicMediaPlayer";
+    private final IBinder m_binder = new MusicBinder();  // Binderの生成
+
+
 
     /**
-     * サービスへの通信チャンネルを戻す
-     *
+     * サービスのバインド開始時に呼び出す
+     */
+    @Override
+    public void onCreate() {
+        Log.i(TAG, "onCreate");
+        Toast.makeText(this, "MyService#onCreate", Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     * サービスのバインド時 onCreate()の後に呼ばれる
      * @param intent	インテント
      * @return m_binder	生成したバインダー
      */
@@ -59,6 +49,15 @@ public class MusicMediaPlayer extends Service
     public IBinder onBind(Intent intent) {
         Log.i(TAG, "onBind: " + intent);
         return m_binder;
+    }
+
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int start_id) {
+        Log.i(TAG, "onStartCommand Received start id " + start_id + ": " + intent);
+        Toast.makeText(this, "MyService#onStartCommand", Toast.LENGTH_SHORT).show();
+        //明示的にサービスの起動、停止が決められる場合の返り値
+        return START_STICKY;
     }
 
     /**
@@ -70,13 +69,25 @@ public class MusicMediaPlayer extends Service
     }
 
     /**
-     *
+     * サービスのアンバインド後に呼び出す
+     * @param intent
+     * @return
      */
     @Override
     public boolean onUnbind(Intent intent) {
         Log.i(TAG, "onUnbind: " + intent);
         return true;
     }
+
+    /**
+     * サービスのアンバインド後、onUnbind()の処理が終了すると呼び出す
+     */
+    @Override
+    public void onDestroy() {
+        Log.i(TAG, "onDestroy");
+        Toast.makeText(this, "MyService#onDestroy", Toast.LENGTH_SHORT).show();
+    }
+
 
     /**
      *

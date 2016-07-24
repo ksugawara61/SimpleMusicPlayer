@@ -1,7 +1,11 @@
 package org.example.simplemusicplayer.Controller;
 
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -20,6 +24,9 @@ public class MainFragment extends Fragment {
 
     private final static String TAG = "MainFragment";
     private AlertDialog m_dialog;
+    private MusicMediaPlayer m_player;
+    private boolean m_isbound;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -134,12 +141,14 @@ public class MainFragment extends Fragment {
                 // 再生ボタンを押下
                 case R.id.play_button:
                     Log.i(TAG, "push play button");
-                    getActivity().startService(new Intent(getActivity(), MusicMediaPlayer.class));
+//                    getActivity().startService(new Intent(getActivity(), MusicMediaPlayer.class));
+                    doBindService();
                     break;
 
                 case R.id.next_button:
                     Log.i(TAG, "push next button");
-                    getActivity().stopService(new Intent(getActivity(), MusicMediaPlayer.class));
+//                    getActivity().stopService(new Intent(getActivity(), MusicMediaPlayer.class));
+                    doUnbindService();
                     break;
 
                 default:
@@ -147,4 +156,48 @@ public class MainFragment extends Fragment {
             }
         }
     };
+
+    /**
+     * サービスのコネクション関連処理
+     */
+    private ServiceConnection m_connection = new ServiceConnection() {
+        /**
+         * サービスのバインド時に呼び出す
+         * @param class_name
+         * @param service
+         */
+        public void onServiceConnected(ComponentName class_name, IBinder service) {
+            Log.i(TAG, "onServiceConnected");
+            m_player = ((MusicMediaPlayer.MusicBinder)service).getService();
+        }
+
+        /**
+         * サービスのクラッシュ時に呼び出す
+         * @param class_name
+         */
+        public void onServiceDisconnected(ComponentName class_name) {
+            Log.i(TAG, "onServiceDisconnected");
+            m_player = null;
+        }
+    };
+
+    /**
+     * サービスをバインド（接続）
+     */
+    void doBindService() {
+        getActivity().bindService(new Intent(getActivity(), MusicMediaPlayer.class),
+                m_connection, Context.BIND_AUTO_CREATE);
+        m_isbound = true;
+    }
+
+    /**
+     * サービスをアンバインド（切断）
+     */
+    void doUnbindService() {
+        if (m_isbound) {
+            // コネクションの解除
+            getActivity().unbindService(m_connection);
+            m_isbound = false;
+        }
+    }
 }
