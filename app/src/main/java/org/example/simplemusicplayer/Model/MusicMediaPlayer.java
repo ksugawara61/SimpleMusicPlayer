@@ -9,10 +9,13 @@ import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
 
+import java.io.IOException;
+
 /**
  * Created by katsuya on 16/07/24.
  */
 public class MusicMediaPlayer extends Service
+        implements MediaPlayer.OnCompletionListener
 {
 
     /**
@@ -28,7 +31,8 @@ public class MusicMediaPlayer extends Service
 
     private static final String TAG = "MusicMediaPlayer";
     private final IBinder m_binder = new MusicBinder();  // Binderの生成
-
+    private MediaPlayer m_player = null;  // 音楽プレーヤー
+    private int m_id;
 
 
     /**
@@ -37,7 +41,6 @@ public class MusicMediaPlayer extends Service
     @Override
     public void onCreate() {
         Log.i(TAG, "onCreate");
-        Toast.makeText(this, "MyService#onCreate", Toast.LENGTH_SHORT).show();
     }
 
     /**
@@ -55,7 +58,6 @@ public class MusicMediaPlayer extends Service
     @Override
     public int onStartCommand(Intent intent, int flags, int start_id) {
         Log.i(TAG, "onStartCommand Received start id " + start_id + ": " + intent);
-        Toast.makeText(this, "MyService#onStartCommand", Toast.LENGTH_SHORT).show();
         //明示的にサービスの起動、停止が決められる場合の返り値
         return START_STICKY;
     }
@@ -85,84 +87,81 @@ public class MusicMediaPlayer extends Service
     @Override
     public void onDestroy() {
         Log.i(TAG, "onDestroy");
-        Toast.makeText(this, "MyService#onDestroy", Toast.LENGTH_SHORT).show();
+        stopMusic();  // 音楽の停止
     }
 
 
     /**
-     *
+     * 音楽再生終了時の処理
+     * @param player 音楽プレーヤー
      */
     public void onCompletion(MediaPlayer player) {
-
+        Log.i(TAG, "onCompletion");
     }
 
     /**
      * 音楽の再生
      */
-    /*public void playMusic(int id, String title, String path) {
+    public void playMusic(int id, String title, String path) {
+        Log.i(TAG, "playMusic");
+
         m_id = id;
 
-        // プレーヤーに情報が残っている場合停止する
+        // 音楽プレーヤーが再生中の場合一時停止する
         if (m_player != null) {
-            m_player.stop();
-            m_player.release();
+            if (m_player.isPlaying()) {
+                pauseMusic();
+                return;
+            }
+            else {
+                unpauseMusic();
+                return;
+            }
         }
 
-        // 音楽ファイル再生用にURIを生成
-        Uri.Builder builder = new Uri.Builder();
-        builder.path(path);
-        builder.scheme("file");
-
-        m_player = MediaPlayer.create(this, builder.build());
-
         // 音楽を再生
-        m_player.start();
-        m_player.setOnCompletionListener(this);
-    }*/
+        m_player = new MediaPlayer();
+        try {
+            m_player.setDataSource(path);
+            m_player.prepare();
+            m_player.start();
+            m_player.setOnCompletionListener(this);
+        }
+        catch (IOException e) {
+            Log.e(TAG, e.toString());
+        }
+    }
 
     /**
      * 音楽の一時停止
      */
-    /*public void pauseMusic() {
+    public void pauseMusic() {
+        Log.i(TAG, "pauseMusic");
         if (m_player != null) {
             m_player.pause();
         }
-    }*/
+    }
 
     /**
      * 音楽の再開
      */
-    /*public void unpauseMusic() {
+    public void unpauseMusic() {
+        Log.i(TAG, "unpauseMusic");
         if (m_player != null) {
             m_player.start();
         }
-    }*/
+    }
 
     /**
      * 音楽の停止
      */
-    /*public void stopMusic() {
+    public void stopMusic() {
+        Log.i(TAG, "stopMusic");
         if (m_player != null) {
             m_player.stop();
             m_player.setOnCompletionListener(null);
             m_player.release();
             m_player = null;
         }
-    }*/
-
-    /*private MediaPlayer m_player;
-    private final IBinder m_binder = new MPBinder();
-    private int m_id;
-    private int m_music_len;
-
-    @Override
-    public void onStart(Intent intent, int start_id) {
-
     }
-
-    @Override
-    public void onDestroy() {
-        // サウンドの停止
-    }*/
-
 }

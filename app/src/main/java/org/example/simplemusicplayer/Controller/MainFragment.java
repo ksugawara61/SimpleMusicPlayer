@@ -27,11 +27,13 @@ public class MainFragment extends Fragment {
     private MusicMediaPlayer m_player;
     private boolean m_isbound;
 
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                            Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
+        Log.d(TAG, "onCreate");
+
+        // DBの更新
         MusicDBAdapter adapter = new MusicDBAdapter(getContext(), "simplemusicplayer.db", null, 1);
         try {
             adapter.insertMusic();
@@ -40,97 +42,56 @@ public class MainFragment extends Fragment {
             Log.e(TAG, e.toString());
         }
 
+        doBindService();  // サービスをバインド
+    }
+
+    /**
+     * ビューの生成
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                            Bundle savedInstanceState) {
+
         View root_view = inflater.inflate(R.layout.fragment_main, container, false);
 
         // 再生ボタンのイベントを作成
         View play_button = root_view.findViewById(R.id.play_button);
         play_button.setOnClickListener(btnListener);
-        /*play_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // ここに曲の再生 or 停止のイベントを作成
-
-                AlertDialog.Builder builder =
-                        new AlertDialog.Builder(getActivity());
-                builder.setTitle("play music");
-                builder.setMessage("Now, You play the music");
-                builder.setCancelable(false);
-                builder.setPositiveButton("OK", null);
-                m_dialog = builder.show();
-            }
-        });*/
 
         // 前へボタンのイベントを作成
         View prev_button = root_view.findViewById(R.id.prev_button);
-        prev_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // ここで前の曲を再生
-
-                AlertDialog.Builder builder =
-                        new AlertDialog.Builder(getActivity());
-                builder.setTitle("prev music");
-                builder.setMessage("Now, You play the music");
-                builder.setCancelable(false);
-                builder.setPositiveButton("OK", null);
-                m_dialog = builder.show();
-            }
-        });
+        prev_button.setOnClickListener(btnListener);
 
         // 次へボタンのイベントを作成
         View next_button = root_view.findViewById(R.id.next_button);
         next_button.setOnClickListener(btnListener);
-        /*next_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // ここで次の曲を再生
-
-                AlertDialog.Builder builder =
-                        new AlertDialog.Builder(getActivity());
-                builder.setTitle("next music");
-                builder.setMessage("Now, You play the music");
-                builder.setCancelable(false);
-                builder.setPositiveButton("OK", null);
-                m_dialog = builder.show();
-            }
-        });*/
 
         // ループボタンのイベントを作成
         View roop_button = root_view.findViewById(R.id.roop_button);
-        roop_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // ここでループのON/OFF設定
-
-                AlertDialog.Builder builder =
-                        new AlertDialog.Builder(getActivity());
-                builder.setTitle("roop music");
-                builder.setMessage("Now, You play the music");
-                builder.setCancelable(false);
-                builder.setPositiveButton("OK", null);
-                m_dialog = builder.show();
-            }
-        });
+        roop_button.setOnClickListener(btnListener);
 
         // シャッフルボタンのイベントを作成
         View shuffle_button = root_view.findViewById(R.id.shuffle_button);
-        shuffle_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // ここでループのON/OFF設定
-
-                AlertDialog.Builder builder =
-                        new AlertDialog.Builder(getActivity());
-                builder.setTitle("shuffle music");
-                builder.setMessage("Now, You play the music");
-                builder.setCancelable(false);
-                builder.setPositiveButton("OK", null);
-                m_dialog = builder.show();
-            }
-        });
+        shuffle_button.setOnClickListener(btnListener);
 
         return root_view;
     }
+
+    /**
+     * フラグメントが破棄される時に呼び出す
+     */
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        doUnbindService();  // サービスのアンバインド
+        Log.d(TAG, "onDestroy");
+    }
+
+
 
     /**
      * ボタンのクリックイベント
@@ -138,17 +99,30 @@ public class MainFragment extends Fragment {
     private View.OnClickListener btnListener = new View.OnClickListener() {
         public void onClick(View view) {
             switch(view.getId()) {
-                // 再生ボタンを押下
+                // 再生ボタン押下時の処理
                 case R.id.play_button:
                     Log.i(TAG, "push play button");
-//                    getActivity().startService(new Intent(getActivity(), MusicMediaPlayer.class));
-                    doBindService();
+                    m_player.playMusic(0, "Red", "/storage/sdcard1/music/Taylor Swift/Red/02 Red.mp3");
                     break;
 
+                // 前へボタン押下時の処理
+                case R.id.prev_button:
+                    Log.i(TAG, "push prev button");
+                    break;
+
+                // 次へボタン押下時の処理
                 case R.id.next_button:
                     Log.i(TAG, "push next button");
-//                    getActivity().stopService(new Intent(getActivity(), MusicMediaPlayer.class));
-                    doUnbindService();
+                    break;
+
+                // ループボタン押下時の処理
+                case R.id.roop_button:
+                    Log.i(TAG, "push roop button");
+                    break;
+
+                // シャッフルボタン押下時の処理
+                case R.id.shuffle_button:
+                    Log.i(TAG, "push shuffle button");
                     break;
 
                 default:
