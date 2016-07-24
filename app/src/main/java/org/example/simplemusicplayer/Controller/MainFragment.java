@@ -110,6 +110,7 @@ public class MainFragment extends Fragment {
                 // ループボタン押下時の処理
                 case R.id.roop_button:
                     Log.i(TAG, "push roop button");
+                    m_player.roopMusic();
                     break;
 
                 // シャッフルボタン押下時の処理

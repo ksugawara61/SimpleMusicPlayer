@@ -4,7 +4,6 @@ import android.app.Service;
 import android.content.Intent;
 import android.database.Cursor;
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
@@ -32,7 +31,6 @@ public class MusicMediaPlayer extends Service
         }
     }
 
-
     private static final String TAG = "MusicMediaPlayer";
     private final IBinder m_binder = new MusicBinder();  // Binderの生成
     private MediaPlayer m_player = null;  // 音楽プレーヤー
@@ -41,6 +39,7 @@ public class MusicMediaPlayer extends Service
     private Cursor m_cursor;
     private String m_title;
     private String m_path;
+    private boolean m_roopflag = false; // ループのフラグ
 
     /**
      * サービスのバインド開始時に呼び出す
@@ -111,13 +110,21 @@ public class MusicMediaPlayer extends Service
         stopMusic();  // 音楽の停止
     }
 
-
     /**
      * 音楽再生終了時の処理
      * @param player 音楽プレーヤー
      */
     public void onCompletion(MediaPlayer player) {
         Log.i(TAG, "onCompletion");
+
+        // ループフラグがtrueのとき同じ曲を連続して再生
+        if (m_roopflag) {
+            createMusic();
+        }
+        // ループフラグがfalseのとき次の曲を再生
+        else {
+            nextMusic();
+        }
     }
 
     /**
@@ -194,6 +201,21 @@ public class MusicMediaPlayer extends Service
         Log.i(TAG, "unpauseMusic");
         if (m_player != null) {
             m_player.start();
+        }
+    }
+
+    /**
+     * 音楽のループのON・OFFを制御
+     */
+    public void roopMusic() {
+        Log.i(TAG, "roopMusic");
+        m_roopflag = !m_roopflag;
+
+        if (m_roopflag) {
+            Toast.makeText(this, "ループをONに設定しました", Toast.LENGTH_SHORT).show();
+        }
+        else {
+            Toast.makeText(this, "ループをOFFに設定しました", Toast.LENGTH_SHORT).show();
         }
     }
 
