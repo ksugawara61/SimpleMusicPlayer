@@ -12,8 +12,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
-import org.example.simplemusicplayer.Model.MusicDBAdapter;
 import org.example.simplemusicplayer.Model.MusicMediaPlayer;
 import org.example.simplemusicplayer.R;
 
@@ -26,6 +26,9 @@ public class MainFragment extends Fragment {
     private AlertDialog m_dialog;
     private MusicMediaPlayer m_player;
     private boolean m_isbound;
+
+    // ビューの変化する箇所
+    private TextView m_title_text;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -47,6 +50,9 @@ public class MainFragment extends Fragment {
                             Bundle savedInstanceState) {
 
         View root_view = inflater.inflate(R.layout.fragment_main, container, false);
+
+        // 音楽のタイトルを設定
+        m_title_text = (TextView)root_view.findViewById(R.id.title);
 
         // 再生ボタンのイベントを作成
         View play_button = root_view.findViewById(R.id.play_button);
@@ -93,18 +99,26 @@ public class MainFragment extends Fragment {
                 case R.id.play_button:
                     Log.i(TAG, "push play button");
                     m_player.playMusic();
+
+                    // 曲のタイトルを設定
+                    m_title_text.setText(m_player.getMusicTitle());
                     break;
 
                 // 前へボタン押下時の処理
                 case R.id.prev_button:
                     Log.i(TAG, "push prev button");
                     m_player.prevMusic();
+
+                    // 曲のタイトルを設定
+                    m_title_text.setText(m_player.getMusicTitle());
                     break;
 
                 // 次へボタン押下時の処理
                 case R.id.next_button:
                     Log.i(TAG, "push next button");
                     m_player.nextMusic();
+
+                    m_title_text.setText(m_player.getMusicTitle());
                     break;
 
                 // ループボタン押下時の処理

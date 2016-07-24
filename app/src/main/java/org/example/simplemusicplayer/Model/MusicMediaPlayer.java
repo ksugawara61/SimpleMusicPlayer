@@ -134,6 +134,14 @@ public class MusicMediaPlayer extends Service
     }
 
     /**
+     * 再生している音楽のタイトルを取得
+     * @return m_title 音楽のタイトル
+     */
+    public String getMusicTitle() {
+        return m_title;
+    }
+
+    /**
      * 音楽の再生
      */
     public void playMusic() {
@@ -195,24 +203,6 @@ public class MusicMediaPlayer extends Service
         if(!m_cursor.moveToNext()) {
             m_cursor.moveToFirst();
         }
-        m_id = Integer.parseInt(m_cursor.getString(0));
-        m_title = m_cursor.getString(1);
-        m_path = m_cursor.getString(2);
-
-        Log.i(TAG, m_cursor.getString(0));
-        Log.i(TAG, m_title);
-        Log.i(TAG, m_path);
-
-        createMusic();
-    }
-
-    /**
-     * シャッフルした曲を再生
-     */
-    public void shuffleMusic() {
-        Log.i(TAG, "shuffleMusic");
-        m_cursor.moveToPosition(m_rand.nextInt(m_musiclen));
-
         m_id = Integer.parseInt(m_cursor.getString(0));
         m_title = m_cursor.getString(1);
         m_path = m_cursor.getString(2);
@@ -287,6 +277,24 @@ public class MusicMediaPlayer extends Service
             m_player.release();
             m_player = null;
         }
+    }
+
+    /**
+     * シャッフルした曲を再生
+     */
+    private void shuffleMusic() {
+        Log.i(TAG, "shuffleMusic");
+        m_cursor.moveToPosition(m_rand.nextInt(m_musiclen));
+
+        m_id = Integer.parseInt(m_cursor.getString(0));
+        m_title = m_cursor.getString(1);
+        m_path = m_cursor.getString(2);
+
+        Log.i(TAG, m_cursor.getString(0));
+        Log.i(TAG, m_title);
+        Log.i(TAG, m_path);
+
+        createMusic();
     }
 
     /**
