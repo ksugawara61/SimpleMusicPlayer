@@ -110,12 +110,13 @@ public class MainFragment extends Fragment {
                 // ループボタン押下時の処理
                 case R.id.roop_button:
                     Log.i(TAG, "push roop button");
-                    m_player.roopMusic();
+                    m_player.setRoopMusic();
                     break;
 
                 // シャッフルボタン押下時の処理
                 case R.id.shuffle_button:
                     Log.i(TAG, "push shuffle button");
+                    m_player.setShuffleMusic();
                     break;
 
                 default:

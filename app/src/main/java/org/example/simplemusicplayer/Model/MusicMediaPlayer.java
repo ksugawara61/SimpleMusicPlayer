@@ -10,6 +10,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.util.Random;
 
 /**
  * Created by katsuya on 16/07/24.
@@ -35,11 +36,14 @@ public class MusicMediaPlayer extends Service
     private final IBinder m_binder = new MusicBinder();  // Binderの生成
     private MediaPlayer m_player = null;  // 音楽プレーヤー
     private MusicDBAdapter m_adapter = null;
+    private int m_musiclen;  // レコード数
+    private Random m_rand = new Random();   // シャッフル用の乱数
     private int m_id;
     private Cursor m_cursor;
     private String m_title;
     private String m_path;
-    private boolean m_roopflag = false; // ループのフラグ
+    private boolean m_roopflag = false; // ループフラグ
+    private boolean m_shuffleflag = false;  // シャッフルフラグ
 
     /**
      * サービスのバインド開始時に呼び出す
@@ -54,11 +58,13 @@ public class MusicMediaPlayer extends Service
 
         // 音楽ファイルの先頭のレコードを初期値として設定
         m_cursor = m_adapter.rawQueryMusic("select music_id, music_name, music_path from music", null);
+        m_musiclen = m_cursor.getCount();  // レコード数を取得
         m_cursor.moveToFirst();
         m_id = Integer.parseInt(m_cursor.getString(0));
         m_title = m_cursor.getString(1);
         m_path = m_cursor.getString(2);
 
+        Log.i(TAG, m_cursor.getString(0));
         Log.i(TAG, m_title);
         Log.i(TAG, m_path);
     }
@@ -153,6 +159,13 @@ public class MusicMediaPlayer extends Service
      */
     public void prevMusic() {
         Log.i(TAG, "prevMusic");
+
+        // シャッフルがONの場合次の音楽をランダムで指定
+        if (m_shuffleflag) {
+            shuffleMusic();
+            return;
+        }
+
         if(!m_cursor.moveToPrevious()) {
             m_cursor.moveToLast();
         }
@@ -160,6 +173,7 @@ public class MusicMediaPlayer extends Service
         m_title = m_cursor.getString(1);
         m_path = m_cursor.getString(2);
 
+        Log.i(TAG, m_cursor.getString(0));
         Log.i(TAG, m_title);
         Log.i(TAG, m_path);
 
@@ -171,6 +185,13 @@ public class MusicMediaPlayer extends Service
      */
     public void nextMusic() {
         Log.i(TAG, "nextMusic");
+
+        // シャッフルがONの場合次の音楽をランダムで指定
+        if (m_shuffleflag) {
+            shuffleMusic();
+            return;
+        }
+
         if(!m_cursor.moveToNext()) {
             m_cursor.moveToFirst();
         }
@@ -178,6 +199,25 @@ public class MusicMediaPlayer extends Service
         m_title = m_cursor.getString(1);
         m_path = m_cursor.getString(2);
 
+        Log.i(TAG, m_cursor.getString(0));
+        Log.i(TAG, m_title);
+        Log.i(TAG, m_path);
+
+        createMusic();
+    }
+
+    /**
+     * シャッフルした曲を再生
+     */
+    public void shuffleMusic() {
+        Log.i(TAG, "shuffleMusic");
+        m_cursor.moveToPosition(m_rand.nextInt(m_musiclen));
+
+        m_id = Integer.parseInt(m_cursor.getString(0));
+        m_title = m_cursor.getString(1);
+        m_path = m_cursor.getString(2);
+
+        Log.i(TAG, m_cursor.getString(0));
         Log.i(TAG, m_title);
         Log.i(TAG, m_path);
 
@@ -207,8 +247,8 @@ public class MusicMediaPlayer extends Service
     /**
      * 音楽のループのON・OFFを制御
      */
-    public void roopMusic() {
-        Log.i(TAG, "roopMusic");
+    public void setRoopMusic() {
+        Log.i(TAG, "setRoopMusic");
         m_roopflag = !m_roopflag;
 
         if (m_roopflag) {
@@ -216,6 +256,21 @@ public class MusicMediaPlayer extends Service
         }
         else {
             Toast.makeText(this, "ループをOFFに設定しました", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    /**
+     * 音楽のシャッフルのON・OFFを制御
+     */
+    public void setShuffleMusic() {
+        Log.i(TAG, "setShuffleMusic");
+        m_shuffleflag = !m_shuffleflag;
+
+        if (m_shuffleflag) {
+            Toast.makeText(this, "シャッフルをONに設定しました", Toast.LENGTH_SHORT).show();
+        }
+        else {
+            Toast.makeText(this, "シャッフルをOFFに設定しました", Toast.LENGTH_SHORT).show();
         }
     }
 
