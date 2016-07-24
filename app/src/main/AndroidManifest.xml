@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.example.simplemusicplayer">
 
+    <!-- 外部ストレージへのアクセス -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
@@ -17,6 +18,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- 音楽サービス利用の許可 -->
+        <service android:name=".Model.MusicMediaPlayer" />
     </application>
 
 </manifest>

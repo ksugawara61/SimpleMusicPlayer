@@ -27,6 +27,10 @@ public class MusicDBAdapter {
 
     /**
      * コンストラクタ
+     * @param context コンテキスト
+     * @param name    データベース名
+     * @param factory
+     * @param version データベースバージョン
      */
     public MusicDBAdapter(Context context, String name,
                           CursorFactory factory, int version)
@@ -43,6 +47,13 @@ public class MusicDBAdapter {
         File test = new File("/storage/sdcard1/music");
         List<File> music = searchMusicFiles(test);
         insertMusicFiles(music);
+    }
+
+    /**
+     * 音楽ファイルの情報をデータベースから取得
+     */
+    public void selectMusic(int id) {
+
     }
 
     /**
@@ -71,6 +82,7 @@ public class MusicDBAdapter {
 
     /**
      * 音楽ファイルをDBに格納
+     * @param music 音楽ファイル一覧
      */
     private void insertMusicFiles(List<File> music) {
         for (File file : music) {
@@ -87,6 +99,7 @@ public class MusicDBAdapter {
                 String title = new String(w, 3, 30, "Shift_JIS").replaceAll("'", "\"");
                 String artist = new String(w, 33, 30, "Shift_JIS").replaceAll("'", "\"");
                 String album = new String(w, 63, 30, "Shift_JIS").replaceAll("'", "\"");
+                Log.i(TAG, "music: " + title + " path: " + file.getAbsolutePath());
 
                 // レコードに格納するパラメータを付与
                 ContentValues values = new ContentValues();
@@ -103,8 +116,6 @@ public class MusicDBAdapter {
             catch (Exception e) {
                 Log.e(TAG, e.toString());
             }
-
-            //db.insert
         }
     }
 }
