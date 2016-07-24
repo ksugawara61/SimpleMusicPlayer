@@ -32,16 +32,6 @@ public class MainFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         Log.d(TAG, "onCreate");
-
-        // DBの更新
-        MusicDBAdapter adapter = new MusicDBAdapter(getContext(), "simplemusicplayer.db", null, 1);
-        try {
-            adapter.insertMusic();
-        }
-        catch (Exception e) {
-            Log.e(TAG, e.toString());
-        }
-
         doBindService();  // サービスをバインド
     }
 
@@ -102,17 +92,19 @@ public class MainFragment extends Fragment {
                 // 再生ボタン押下時の処理
                 case R.id.play_button:
                     Log.i(TAG, "push play button");
-                    m_player.playMusic(0, "Red", "/storage/sdcard1/music/Taylor Swift/Red/02 Red.mp3");
+                    m_player.playMusic();
                     break;
 
                 // 前へボタン押下時の処理
                 case R.id.prev_button:
                     Log.i(TAG, "push prev button");
+                    m_player.prevMusic();
                     break;
 
                 // 次へボタン押下時の処理
                 case R.id.next_button:
                     Log.i(TAG, "push next button");
+                    m_player.nextMusic();
                     break;
 
                 // ループボタン押下時の処理

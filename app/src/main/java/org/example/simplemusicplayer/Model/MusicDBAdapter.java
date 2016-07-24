@@ -2,12 +2,15 @@ package org.example.simplemusicplayer.Model;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.util.Log;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -50,10 +53,15 @@ public class MusicDBAdapter {
     }
 
     /**
-     * 音楽ファイルの情報をデータベースから取得
+     * 生SQLで音楽ファイルデータベースからの値を取得
+     * @param sql SQL文
+     * @param selection_args プレースホルダーに入力する値
+     * @return result SQLの結果
      */
-    public void selectMusic(int id) {
-
+    public Cursor rawQueryMusic(String sql, String[] selection_args) {
+        Log.i(TAG, "rawQueryMusic");
+        Cursor result = db.rawQuery(sql, selection_args);
+        return result;
     }
 
     /**
@@ -113,7 +121,10 @@ public class MusicDBAdapter {
                     db.insert(TABLE_MUSIC, "", values);
                 }
             }
-            catch (Exception e) {
+            catch (FileNotFoundException e) {
+                Log.e(TAG, e.toString());
+            }
+            catch (IOException e) {
                 Log.e(TAG, e.toString());
             }
         }

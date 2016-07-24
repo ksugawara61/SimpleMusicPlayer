@@ -2,6 +2,7 @@ package org.example.simplemusicplayer.Model;
 
 import android.app.Service;
 import android.content.Intent;
+import android.database.Cursor;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Binder;
@@ -13,6 +14,9 @@ import java.io.IOException;
 
 /**
  * Created by katsuya on 16/07/24.
+ * 音楽関連の処理を行うクラス
+ * @version 1.0
+ * @author katsuya
  */
 public class MusicMediaPlayer extends Service
         implements MediaPlayer.OnCompletionListener
@@ -32,8 +36,11 @@ public class MusicMediaPlayer extends Service
     private static final String TAG = "MusicMediaPlayer";
     private final IBinder m_binder = new MusicBinder();  // Binderの生成
     private MediaPlayer m_player = null;  // 音楽プレーヤー
+    private MusicDBAdapter m_adapter = null;
     private int m_id;
-
+    private Cursor m_cursor;
+    private String m_title;
+    private String m_path;
 
     /**
      * サービスのバインド開始時に呼び出す
@@ -41,6 +48,20 @@ public class MusicMediaPlayer extends Service
     @Override
     public void onCreate() {
         Log.i(TAG, "onCreate");
+
+        // DBの更新
+        m_adapter = new MusicDBAdapter(this, "simplemusicplayer.db", null, 1);
+        m_adapter.insertMusic();
+
+        // 音楽ファイルの先頭のレコードを初期値として設定
+        m_cursor = m_adapter.rawQueryMusic("select music_id, music_name, music_path from music", null);
+        m_cursor.moveToFirst();
+        m_id = Integer.parseInt(m_cursor.getString(0));
+        m_title = m_cursor.getString(1);
+        m_path = m_cursor.getString(2);
+
+        Log.i(TAG, m_title);
+        Log.i(TAG, m_path);
     }
 
     /**
@@ -102,34 +123,58 @@ public class MusicMediaPlayer extends Service
     /**
      * 音楽の再生
      */
-    public void playMusic(int id, String title, String path) {
+    public void playMusic() {
         Log.i(TAG, "playMusic");
 
-        m_id = id;
-
-        // 音楽プレーヤーが再生中の場合一時停止する
         if (m_player != null) {
+            // 音楽プレーヤーが再生中の場合一時停止
             if (m_player.isPlaying()) {
                 pauseMusic();
                 return;
             }
+            // 音楽プレーヤーが一時停止中の場合曲を再開
             else {
                 unpauseMusic();
                 return;
             }
         }
+        createMusic();
+    }
 
-        // 音楽を再生
-        m_player = new MediaPlayer();
-        try {
-            m_player.setDataSource(path);
-            m_player.prepare();
-            m_player.start();
-            m_player.setOnCompletionListener(this);
+    /**
+     * 前の曲を再生
+     */
+    public void prevMusic() {
+        Log.i(TAG, "prevMusic");
+        if(!m_cursor.moveToPrevious()) {
+            m_cursor.moveToLast();
         }
-        catch (IOException e) {
-            Log.e(TAG, e.toString());
+        m_id = Integer.parseInt(m_cursor.getString(0));
+        m_title = m_cursor.getString(1);
+        m_path = m_cursor.getString(2);
+
+        Log.i(TAG, m_title);
+        Log.i(TAG, m_path);
+
+        createMusic();
+    }
+
+    /**
+     * 次の曲を再生
+     */
+    public void nextMusic() {
+        Log.i(TAG, "nextMusic");
+        if(!m_cursor.moveToNext()) {
+            m_cursor.moveToFirst();
         }
+        m_id = Integer.parseInt(m_cursor.getString(0));
+        m_title = m_cursor.getString(1);
+        m_path = m_cursor.getString(2);
+
+        Log.i(TAG, m_title);
+        Log.i(TAG, m_path);
+
+        createMusic();
     }
 
     /**
@@ -158,10 +203,34 @@ public class MusicMediaPlayer extends Service
     public void stopMusic() {
         Log.i(TAG, "stopMusic");
         if (m_player != null) {
-            m_player.stop();
+            if(m_player.isPlaying()) {
+                m_player.stop();
+            }
             m_player.setOnCompletionListener(null);
             m_player.release();
             m_player = null;
+        }
+    }
+
+    /**
+     * 音楽のインスタンスを生成し曲を再生する
+     */
+    private void createMusic() {
+        //前の音楽情報が残っている場合削除
+        if (m_player != null) {
+            m_player.stop();
+            m_player.release();
+        }
+
+        m_player = new MediaPlayer();
+        try {
+            m_player.setDataSource(m_path);
+            m_player.prepare();
+            m_player.start();
+            m_player.setOnCompletionListener(this);
+        }
+        catch (IOException e) {
+            Log.e(TAG, e.toString());
         }
     }
 }
