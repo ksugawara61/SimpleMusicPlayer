@@ -143,23 +143,25 @@ public class MusicMediaPlayer extends Service
 
     /**
      * 音楽の再生
+     * @return m_player.isPlaying()  音楽再生のON・OFF
      */
-    public void playMusic() {
+    public boolean playMusic() {
         Log.i(TAG, "playMusic");
 
         if (m_player != null) {
             // 音楽プレーヤーが再生中の場合一時停止
             if (m_player.isPlaying()) {
                 pauseMusic();
-                return;
+                return m_player.isPlaying();
             }
             // 音楽プレーヤーが一時停止中の場合曲を再開
             else {
                 unpauseMusic();
-                return;
+                return m_player.isPlaying();
             }
         }
         createMusic();
+        return m_player.isPlaying();
     }
 
     /**

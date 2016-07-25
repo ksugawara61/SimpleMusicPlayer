@@ -105,10 +105,14 @@ public class MainFragment extends Fragment {
                 // 再生ボタン押下時の処理
                 case R.id.play_button:
                     Log.i(TAG, "push play button");
-                    m_player.playMusic();
-
-                    // 曲のタイトルを設定
-                    m_title_text.setText(m_player.getMusicTitle());
+                    if (m_player.playMusic()) {
+                        // 曲のタイトルを設定
+                        m_title_text.setText(m_player.getMusicTitle());
+                        m_play_button.setImageResource(R.drawable.ic_play_arrow_black_24dp);
+                    }
+                    else {
+                        m_play_button.setImageResource(R.drawable.ic_pause_black_24dp);
+                    }
                     break;
 
                 // 前へボタン押下時の処理
