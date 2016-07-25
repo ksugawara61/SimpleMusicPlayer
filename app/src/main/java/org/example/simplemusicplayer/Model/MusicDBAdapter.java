@@ -9,13 +9,13 @@ import android.media.MediaMetadataRetriever;
 import android.util.Log;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import static android.media.MediaMetadataRetriever.METADATA_KEY_TITLE;
+import static android.media.MediaMetadataRetriever.METADATA_KEY_ARTIST;
+import static android.media.MediaMetadataRetriever.METADATA_KEY_ALBUM;
 
 /**
  * Created by katsuya on 16/07/23.
@@ -101,12 +101,10 @@ public class MusicDBAdapter {
             media_data.setDataSource(path);
 
             // 音楽ファイルのメタデータを取得しDBに格納
-            String title = media_data.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE);
-            String artist = media_data.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST);
-            String album = media_data.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM);
-            Log.i(TAG, "title: " + title);
-            Log.i(TAG, "artist: " + artist);
-            Log.i(TAG, "album: " + album);
+            String title = media_data.extractMetadata(METADATA_KEY_TITLE);
+            String artist = media_data.extractMetadata(METADATA_KEY_ARTIST);
+            String album = media_data.extractMetadata(METADATA_KEY_ALBUM);
+            Log.i(TAG, "music: " + title + " - " + artist + " - " + album + " - " + path);
 
             // レコードに格納するパラメータを付与
             ContentValues values = new ContentValues();
