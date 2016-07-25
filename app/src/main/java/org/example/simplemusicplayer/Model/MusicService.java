@@ -18,7 +18,7 @@ import java.util.Random;
  * @version 1.0
  * @author katsuya
  */
-public class MusicMediaPlayer extends Service
+public class MusicService extends Service
         implements MediaPlayer.OnCompletionListener
 {
 
@@ -27,8 +27,8 @@ public class MusicMediaPlayer extends Service
      */
     public class MusicBinder extends Binder {
         //サービスの取得
-        public MusicMediaPlayer getService() {
-            return MusicMediaPlayer.this;
+        public MusicService getService() {
+            return MusicService.this;
         }
     }
 

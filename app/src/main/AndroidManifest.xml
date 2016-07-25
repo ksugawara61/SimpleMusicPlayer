@@ -20,7 +20,7 @@
         </activity>
 
         <!-- 音楽サービス利用の許可 -->
-        <service android:name=".Model.MusicMediaPlayer" />
+        <service android:name=".Model.MusicService" />
     </application>
 
 </manifest>

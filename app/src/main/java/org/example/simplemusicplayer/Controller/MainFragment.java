@@ -4,9 +4,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.Fragment;
@@ -18,7 +15,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import org.example.simplemusicplayer.Model.MusicMediaPlayer;
+import org.example.simplemusicplayer.Model.MusicService;
 import org.example.simplemusicplayer.R;
 
 /**
@@ -27,8 +24,7 @@ import org.example.simplemusicplayer.R;
 public class MainFragment extends Fragment {
 
     private final static String TAG = "MainFragment";
-    private AlertDialog m_dialog;
-    private MusicMediaPlayer m_player;
+    private MusicService m_service;
     private boolean m_isbound;
 
     // ビューの変化する箇所
@@ -105,37 +101,37 @@ public class MainFragment extends Fragment {
                 // 再生ボタン押下時の処理
                 case R.id.play_button:
                     Log.i(TAG, "push play button");
-                    if (m_player.playMusic()) {
+                    if (m_service.playMusic()) {
                         // 曲のタイトルを設定
-                        m_title_text.setText(m_player.getMusicTitle());
-                        m_play_button.setImageResource(R.drawable.ic_play_arrow_black_24dp);
+                        m_title_text.setText(m_service.getMusicTitle());
+                        m_play_button.setImageResource(R.drawable.ic_pause_black_24dp);
                     }
                     else {
-                        m_play_button.setImageResource(R.drawable.ic_pause_black_24dp);
+                        m_play_button.setImageResource(R.drawable.ic_play_arrow_black_24dp);
                     }
                     break;
 
                 // 前へボタン押下時の処理
                 case R.id.prev_button:
                     Log.i(TAG, "push prev button");
-                    m_player.prevMusic();
+                    m_service.prevMusic();
 
                     // 曲のタイトルを設定
-                    m_title_text.setText(m_player.getMusicTitle());
+                    m_title_text.setText(m_service.getMusicTitle());
                     break;
 
                 // 次へボタン押下時の処理
                 case R.id.next_button:
                     Log.i(TAG, "push next button");
-                    m_player.nextMusic();
+                    m_service.nextMusic();
 
-                    m_title_text.setText(m_player.getMusicTitle());
+                    m_title_text.setText(m_service.getMusicTitle());
                     break;
 
                 // ループボタン押下時の処理
                 case R.id.loop_button:
                     Log.i(TAG, "push loop button");
-                    if (m_player.setRoopMusic()) {
+                    if (m_service.setRoopMusic()) {
                         m_loop_button.setImageResource(R.drawable.ic_repeat_black_24dp);
                     }
                     else {
@@ -146,7 +142,7 @@ public class MainFragment extends Fragment {
                 // シャッフルボタン押下時の処理
                 case R.id.shuffle_button:
                     Log.i(TAG, "push shuffle button");
-                    if (m_player.setShuffleMusic()) {
+                    if (m_service.setShuffleMusic()) {
                         m_shuffle_button.setImageResource(R.drawable.ic_shuffle_black_24dp);
                     }
                     else {
@@ -171,7 +167,7 @@ public class MainFragment extends Fragment {
          */
         public void onServiceConnected(ComponentName class_name, IBinder service) {
             Log.i(TAG, "onServiceConnected");
-            m_player = ((MusicMediaPlayer.MusicBinder)service).getService();
+            m_service = ((MusicService.MusicBinder)service).getService();
         }
 
         /**
@@ -180,7 +176,7 @@ public class MainFragment extends Fragment {
          */
         public void onServiceDisconnected(ComponentName class_name) {
             Log.i(TAG, "onServiceDisconnected");
-            m_player = null;
+            m_service = null;
         }
     };
 
@@ -188,7 +184,7 @@ public class MainFragment extends Fragment {
      * サービスをバインド（接続）
      */
     void doBindService() {
-        getActivity().bindService(new Intent(getActivity(), MusicMediaPlayer.class),
+        getActivity().bindService(new Intent(getActivity(), MusicService.class),
                 m_connection, Context.BIND_AUTO_CREATE);
         m_isbound = true;
     }
