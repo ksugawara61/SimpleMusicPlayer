@@ -40,6 +40,8 @@ public class MusicService extends Service
     private int m_id;
     private Cursor m_cursor;
     private String m_title;
+    private String m_artist;
+    private String m_album;
     private String m_path;
     private boolean m_roopflag = false; // ループフラグ
     private boolean m_shuffleflag = false;  // シャッフルフラグ
@@ -53,15 +55,18 @@ public class MusicService extends Service
 
         // DBの更新
         m_adapter = new MusicDBAdapter(this, "simplemusicplayer.db", null, 1);
-        m_adapter.insertMusic();
+//        m_adapter.insertMusic();  // TODO 処理が重いのでThredに変える
 
         // 音楽ファイルの先頭のレコードを初期値として設定
-        m_cursor = m_adapter.rawQueryMusic("select music_id, music_title, music_path from music", null);
+        m_cursor = m_adapter.rawQueryMusic("select music_id, music_title, music_artist," +
+                "music_album, music_path from music", null);
         m_musiclen = m_cursor.getCount();  // レコード数を取得
         m_cursor.moveToFirst();
         m_id = Integer.parseInt(m_cursor.getString(0));
         m_title = m_cursor.getString(1);
-        m_path = m_cursor.getString(2);
+        m_artist = m_cursor.getString(2);
+        m_album = m_cursor.getString(3);
+        m_path = m_cursor.getString(4);
 
         Log.i(TAG, m_cursor.getString(0));
         Log.i(TAG, m_title);
@@ -141,6 +146,22 @@ public class MusicService extends Service
     }
 
     /**
+     * 再生している音楽のアーティストを取得
+     * @return m_artist 音楽のアーティスト
+     */
+    public String getMusicArtist() {
+        return m_artist;
+    }
+
+    /**
+     * 再生している音楽のアルバムを取得
+     * @return m_album 音楽のアルバム
+     */
+    public String getMusicAlbum() {
+        return m_album;
+    }
+
+    /**
      * 音楽の再生
      * @return m_player.isPlaying()  音楽再生のON・OFF
      */
@@ -180,7 +201,9 @@ public class MusicService extends Service
         }
         m_id = Integer.parseInt(m_cursor.getString(0));
         m_title = m_cursor.getString(1);
-        m_path = m_cursor.getString(2);
+        m_artist = m_cursor.getString(2);
+        m_album = m_cursor.getString(3);
+        m_path = m_cursor.getString(4);
 
         Log.i(TAG, m_cursor.getString(0));
         Log.i(TAG, m_title);
@@ -206,7 +229,9 @@ public class MusicService extends Service
         }
         m_id = Integer.parseInt(m_cursor.getString(0));
         m_title = m_cursor.getString(1);
-        m_path = m_cursor.getString(2);
+        m_artist = m_cursor.getString(2);
+        m_album = m_cursor.getString(3);
+        m_path = m_cursor.getString(4);
 
         Log.i(TAG, m_cursor.getString(0));
         Log.i(TAG, m_title);
@@ -279,7 +304,9 @@ public class MusicService extends Service
 
         m_id = Integer.parseInt(m_cursor.getString(0));
         m_title = m_cursor.getString(1);
-        m_path = m_cursor.getString(2);
+        m_artist = m_cursor.getString(2);
+        m_album = m_cursor.getString(3);
+        m_path = m_cursor.getString(4);
 
         Log.i(TAG, m_cursor.getString(0));
         Log.i(TAG, m_title);
