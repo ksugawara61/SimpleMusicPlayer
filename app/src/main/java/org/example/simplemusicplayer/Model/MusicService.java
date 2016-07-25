@@ -7,7 +7,6 @@ import android.media.MediaPlayer;
 import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.Random;
@@ -243,14 +242,6 @@ public class MusicService extends Service
     public boolean setRoopMusic() {
         Log.i(TAG, "setRoopMusic");
         m_roopflag = !m_roopflag;
-
-        if (m_roopflag) {
-            Toast.makeText(this, "ループをONに設定しました", Toast.LENGTH_SHORT).show();
-        }
-        else {
-            Toast.makeText(this, "ループをOFFに設定しました", Toast.LENGTH_SHORT).show();
-        }
-
         return m_roopflag;
     }
 
@@ -261,14 +252,6 @@ public class MusicService extends Service
     public boolean setShuffleMusic() {
         Log.i(TAG, "setShuffleMusic");
         m_shuffleflag = !m_shuffleflag;
-
-        if (m_shuffleflag) {
-            Toast.makeText(this, "シャッフルをONに設定しました", Toast.LENGTH_SHORT).show();
-        }
-        else {
-            Toast.makeText(this, "シャッフルをOFFに設定しました", Toast.LENGTH_SHORT).show();
-        }
-
         return m_shuffleflag;
     }
 

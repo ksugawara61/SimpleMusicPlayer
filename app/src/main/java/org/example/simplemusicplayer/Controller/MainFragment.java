@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.example.simplemusicplayer.Model.MusicService;
 import org.example.simplemusicplayer.R;
@@ -133,9 +134,11 @@ public class MainFragment extends Fragment {
                     Log.i(TAG, "push loop button");
                     if (m_service.setRoopMusic()) {
                         m_loop_button.setImageResource(R.drawable.ic_repeat_black_24dp);
+                        Toast.makeText(getContext(), "ループをONに設定しました", Toast.LENGTH_SHORT).show();
                     }
                     else {
                         m_loop_button.setImageResource(R.drawable.ic_repeat_white_24dp);
+                        Toast.makeText(getContext(), "ループをOFFに設定しました", Toast.LENGTH_SHORT).show();
                     }
                     break;
 
@@ -144,9 +147,11 @@ public class MainFragment extends Fragment {
                     Log.i(TAG, "push shuffle button");
                     if (m_service.setShuffleMusic()) {
                         m_shuffle_button.setImageResource(R.drawable.ic_shuffle_black_24dp);
+                        Toast.makeText(getContext(), "シャッフルをONに設定しました", Toast.LENGTH_SHORT).show();
                     }
                     else {
                         m_shuffle_button.setImageResource(R.drawable.ic_shuffle_white_24dp);
+                        Toast.makeText(getContext(), "シャッフルをOFFに設定しました", Toast.LENGTH_SHORT).show();
                     }
                     break;
 
