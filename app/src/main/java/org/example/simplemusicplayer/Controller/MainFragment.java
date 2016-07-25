@@ -4,6 +4,9 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.Fragment;
@@ -12,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import org.example.simplemusicplayer.Model.MusicMediaPlayer;
@@ -29,6 +33,9 @@ public class MainFragment extends Fragment {
 
     // ビューの変化する箇所
     private TextView m_title_text;
+    private ImageButton m_loop_button;    // ループボタン
+    private ImageButton m_play_button;    // 再生ボタン
+    private ImageButton m_shuffle_button; // シャッフルボタン
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -51,28 +58,28 @@ public class MainFragment extends Fragment {
 
         View root_view = inflater.inflate(R.layout.fragment_main, container, false);
 
-        // 音楽のタイトルを設定
+        // メンバ変数に格納
         m_title_text = (TextView)root_view.findViewById(R.id.title);
 
         // 再生ボタンのイベントを作成
-        View play_button = root_view.findViewById(R.id.play_button);
-        play_button.setOnClickListener(btnListener);
+        m_play_button = (ImageButton)root_view.findViewById(R.id.play_button);
+        m_play_button.setOnClickListener(btnListener);
 
         // 前へボタンのイベントを作成
-        View prev_button = root_view.findViewById(R.id.prev_button);
+        ImageButton prev_button = (ImageButton)root_view.findViewById(R.id.prev_button);
         prev_button.setOnClickListener(btnListener);
 
         // 次へボタンのイベントを作成
-        View next_button = root_view.findViewById(R.id.next_button);
+        ImageButton next_button = (ImageButton)root_view.findViewById(R.id.next_button);
         next_button.setOnClickListener(btnListener);
 
         // ループボタンのイベントを作成
-        View roop_button = root_view.findViewById(R.id.roop_button);
-        roop_button.setOnClickListener(btnListener);
+        m_loop_button = (ImageButton)root_view.findViewById(R.id.loop_button);
+        m_loop_button.setOnClickListener(btnListener);
 
         // シャッフルボタンのイベントを作成
-        View shuffle_button = root_view.findViewById(R.id.shuffle_button);
-        shuffle_button.setOnClickListener(btnListener);
+        m_shuffle_button = (ImageButton)root_view.findViewById(R.id.shuffle_button);
+        m_shuffle_button.setOnClickListener(btnListener);
 
         return root_view;
     }
@@ -122,15 +129,25 @@ public class MainFragment extends Fragment {
                     break;
 
                 // ループボタン押下時の処理
-                case R.id.roop_button:
-                    Log.i(TAG, "push roop button");
-                    m_player.setRoopMusic();
+                case R.id.loop_button:
+                    Log.i(TAG, "push loop button");
+                    if (m_player.setRoopMusic()) {
+                        m_loop_button.setImageResource(R.drawable.ic_repeat_black_24dp);
+                    }
+                    else {
+                        m_loop_button.setImageResource(R.drawable.ic_repeat_white_24dp);
+                    }
                     break;
 
                 // シャッフルボタン押下時の処理
                 case R.id.shuffle_button:
                     Log.i(TAG, "push shuffle button");
-                    m_player.setShuffleMusic();
+                    if (m_player.setShuffleMusic()) {
+                        m_shuffle_button.setImageResource(R.drawable.ic_shuffle_black_24dp);
+                    }
+                    else {
+                        m_shuffle_button.setImageResource(R.drawable.ic_shuffle_white_24dp);
+                    }
                     break;
 
                 default:

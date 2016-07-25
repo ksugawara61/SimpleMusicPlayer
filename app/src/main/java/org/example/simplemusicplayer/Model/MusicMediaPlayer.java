@@ -236,8 +236,9 @@ public class MusicMediaPlayer extends Service
 
     /**
      * 音楽のループのON・OFFを制御
+     * @return m_roopflag  ループのON・OFF
      */
-    public void setRoopMusic() {
+    public boolean setRoopMusic() {
         Log.i(TAG, "setRoopMusic");
         m_roopflag = !m_roopflag;
 
@@ -247,12 +248,15 @@ public class MusicMediaPlayer extends Service
         else {
             Toast.makeText(this, "ループをOFFに設定しました", Toast.LENGTH_SHORT).show();
         }
+
+        return m_roopflag;
     }
 
     /**
      * 音楽のシャッフルのON・OFFを制御
+     * @return m_shuffleflag  シャッフルのON・OFF
      */
-    public void setShuffleMusic() {
+    public boolean setShuffleMusic() {
         Log.i(TAG, "setShuffleMusic");
         m_shuffleflag = !m_shuffleflag;
 
@@ -262,6 +266,8 @@ public class MusicMediaPlayer extends Service
         else {
             Toast.makeText(this, "シャッフルをOFFに設定しました", Toast.LENGTH_SHORT).show();
         }
+
+        return m_shuffleflag;
     }
 
     /**
