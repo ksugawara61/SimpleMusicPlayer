@@ -117,11 +117,13 @@
             android:layout_weight="1"
             android:text="Prev"
             android:id="@+id/prev_button" />
-        <Button
+        <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
             android:layout_weight="1"
-            android:text="Start"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_play_arrow_black_24dp"
             android:id="@+id/play_button" />
         <Button
             android:layout_width="wrap_content"
