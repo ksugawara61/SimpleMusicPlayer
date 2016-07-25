@@ -56,7 +56,7 @@ public class MusicService extends Service
         m_adapter.insertMusic();
 
         // 音楽ファイルの先頭のレコードを初期値として設定
-        m_cursor = m_adapter.rawQueryMusic("select music_id, music_name, music_path from music", null);
+        m_cursor = m_adapter.rawQueryMusic("select music_id, music_title, music_path from music", null);
         m_musiclen = m_cursor.getCount();  // レコード数を取得
         m_cursor.moveToFirst();
         m_id = Integer.parseInt(m_cursor.getString(0));

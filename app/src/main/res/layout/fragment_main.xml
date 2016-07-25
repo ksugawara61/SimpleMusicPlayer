@@ -75,18 +75,16 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:text="タイトル"
-                android:textSize="22sp"
-                android:textColor="#fff"
-                android:background="#0000ff" />
+                android:textSize="20sp"
+                android:textColor="#000" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:text="アーティスト・アルバム"
-                android:textSize="22sp"
-                android:textColor="#fff"
-                android:background="#00bbff" />
+                android:textSize="20sp"
+                android:textColor="#000" />
 
         </LinearLayout>
     </LinearLayout>
