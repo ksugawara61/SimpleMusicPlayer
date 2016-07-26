@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.example.simplemusicplayer.Model.DBConstant.*;
 import static android.media.MediaMetadataRetriever.METADATA_KEY_TITLE;
 import static android.media.MediaMetadataRetriever.METADATA_KEY_ARTIST;
 import static android.media.MediaMetadataRetriever.METADATA_KEY_ALBUM;
@@ -39,6 +40,8 @@ public class MusicDBAdapter {
     public MusicDBAdapter(Context context, String name,
                           CursorFactory factory, int version)
     {
+        Log.d(TAG, "MusicDBAdapter");
+
         // データベースの生成
         DBHelper db_helper = new DBHelper(context, name, factory, version);
         db = db_helper.getWritableDatabase();
@@ -48,6 +51,7 @@ public class MusicDBAdapter {
      * 音楽ファイルの情報をデータベースに格納
      */
     public void insertMusic() {
+        Log.d(TAG, "insertMusic");
         File test = new File("/storage/sdcard1/music");
         List<File> music = searchMusicFiles(test);
         insertMusicFiles(music);
@@ -60,7 +64,7 @@ public class MusicDBAdapter {
      * @return result SQLの結果
      */
     public Cursor rawQueryMusic(String sql, String[] selection_args) {
-        Log.i(TAG, "rawQueryMusic");
+        Log.d(TAG, "rawQueryMusic");
         Cursor result = db.rawQuery(sql, selection_args);
         return result;
     }
@@ -71,6 +75,7 @@ public class MusicDBAdapter {
      * @return 音楽ファイル一覧
      */
     private List<File> searchMusicFiles(File root) {
+        Log.d(TAG, "searchMusicFiles");
         // ルートディレクトリ配下の音楽ファイル
         List<File> music = new ArrayList<File>();
         music.addAll(Arrays.asList(root.listFiles(new MusicFileFilter())));
@@ -94,6 +99,7 @@ public class MusicDBAdapter {
      * @param music 音楽ファイル一覧
      */
     private void insertMusicFiles(List<File> music) {
+        Log.d(TAG, "insertMusicFiles");
         for (File file : music) {
             // 音楽ファイルのメタデータの読み込み
             String path = file.getAbsolutePath();
@@ -104,18 +110,25 @@ public class MusicDBAdapter {
             String title = media_data.extractMetadata(METADATA_KEY_TITLE);
             String artist = media_data.extractMetadata(METADATA_KEY_ARTIST);
             String album = media_data.extractMetadata(METADATA_KEY_ALBUM);
-            Log.i(TAG, "music: " + title + " - " + artist + " - " + album + " - " + path);
+            Log.d(TAG, "music: " + title + " - " + artist + " - " + album + " - " + path);
 
-            // レコードに格納するパラメータを付与
+            // アーティスト名をテーブルに格納する処理を実装
+
+            // アルバム名をテーブルに格納する処理を実装
+
+            // ジャンル名をテーブルに格納する処理を実装
+
+            // 音楽テーブルに格納するパラメータを付与
             ContentValues values = new ContentValues();
-            values.put("music_title", title);
-            values.put("music_artist", artist);
-            values.put("music_album", album);
-            values.put("music_path", path);
+            values.put(COLUMN_MUSIC_TITLE, title);
+//            values.put("music_artist", artist);
+//            values.put("music_album", album);
+            values.put(COLUMN_MUSIC_PATH, path);
 
             // 既にDBに登録されているレコードか確認し、登録されていない場合新規追加
             String[] where_args = {title};
-            int update_num = db.update(TABLE_MUSIC, values, "music_title = ?", where_args);
+            int update_num = db.update(TABLE_MUSIC, values,
+                    COLUMN_MUSIC_TITLE + " = ?", where_args);
             if (update_num == 0) {
                 db.insert(TABLE_MUSIC, "", values);
             }

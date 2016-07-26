@@ -4,6 +4,9 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+
+import static org.example.simplemusicplayer.Model.DBConstant.*;
 
 /**
  * Created by katsuya on 16/07/22.
@@ -13,7 +16,9 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public class DBHelper extends SQLiteOpenHelper {
 
-    // テーブル名
+    private static final String TAG = "DBHelper";
+
+    /*// テーブル名
     private static final String TABLE_MUSIC = "music";
     private static final String TABLE_ARTIST = "artist";
     private static final String TABLE_GENRE = "genre";
@@ -32,7 +37,7 @@ public class DBHelper extends SQLiteOpenHelper {
             + ")";
 
     // テーブル削除用SQL
-    private static final String DROP_TABLE_MUSIC = "drop table " + TABLE_MUSIC;
+    private static final String DROP_TABLE_MUSIC = "drop table " + TABLE_MUSIC;*/
 
     /**
      * コンストラクタ
@@ -45,6 +50,18 @@ public class DBHelper extends SQLiteOpenHelper {
                     CursorFactory factory, int version)
     {
         super(context, name, factory, version);
+        Log.d(TAG, "DBHelper");
+    }
+
+    /**
+     * データベース接続時に呼び出し
+     * @param db  データベース
+     */
+    @Override
+    public void onConfigure(SQLiteDatabase db) {
+        Log.d(TAG, "onConfigure");
+        // 外部キー制約を有効化
+        db.setForeignKeyConstraintsEnabled(true);
     }
 
     /**
@@ -53,7 +70,13 @@ public class DBHelper extends SQLiteOpenHelper {
      */
     @Override
     public void onCreate(SQLiteDatabase db) {
+        Log.d(TAG, "onCreate");
+        db.execSQL(CREATE_TABLE_ARTIST);
+        db.execSQL(CREATE_TABLE_ALBUM);
+        db.execSQL(CREATE_TABLE_GENRE);
         db.execSQL(CREATE_TABLE_MUSIC);
+        db.execSQL(CREATE_TABLE_PLAYLIST);
+        db.execSQL(CREATE_TABLE_PLAYLIST_MAP);
     }
 
     /**
@@ -64,7 +87,13 @@ public class DBHelper extends SQLiteOpenHelper {
      */
     @Override
     public void onUpgrade(SQLiteDatabase db, int old_version, int new_version) {
+        Log.d(TAG, "onUpgrade");
+        db.execSQL(DROP_TABLE_PLAYLIST_MAP);
+        db.execSQL(DROP_TABLE_PLAYLIST);
         db.execSQL(DROP_TABLE_MUSIC);
+        db.execSQL(DROP_TABLE_ARTIST);
+        db.execSQL(DROP_TABLE_ALBUM);
+        db.execSQL(DROP_TABLE_GENRE);
         onCreate(db);
     }
 }

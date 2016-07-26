@@ -11,6 +11,8 @@ import android.util.Log;
 import java.io.IOException;
 import java.util.Random;
 
+import static org.example.simplemusicplayer.Model.DBConstant.*;
+
 /**
  * Created by katsuya on 16/07/24.
  * 音楽関連の処理を行うクラス
@@ -51,26 +53,26 @@ public class MusicService extends Service
      */
     @Override
     public void onCreate() {
-        Log.i(TAG, "onCreate");
+        Log.d(TAG, "onCreate");
 
         // DBの更新
         m_adapter = new MusicDBAdapter(this, "simplemusicplayer.db", null, 1);
-//        m_adapter.insertMusic();  // TODO 処理が重いのでThredに変える
+        m_adapter.insertMusic();  // TODO 処理が重いのでThredに変える
 
         // 音楽ファイルの先頭のレコードを初期値として設定
-        m_cursor = m_adapter.rawQueryMusic("select music_id, music_title, music_artist," +
-                "music_album, music_path from music", null);
+        m_cursor = m_adapter.rawQueryMusic("select " + COLUMN_MUSIC_ID + ", "
+                + COLUMN_MUSIC_TITLE + ", " + COLUMN_MUSIC_PATH + " from "
+                + TABLE_MUSIC, null);
         m_musiclen = m_cursor.getCount();  // レコード数を取得
         m_cursor.moveToFirst();
         m_id = Integer.parseInt(m_cursor.getString(0));
         m_title = m_cursor.getString(1);
-        m_artist = m_cursor.getString(2);
-        m_album = m_cursor.getString(3);
-        m_path = m_cursor.getString(4);
+        m_artist = "test";  //m_cursor.getString(2);
+        m_album = "test";  //m_cursor.getString(3);
+        m_path = m_cursor.getString(2);
 
-        Log.i(TAG, m_cursor.getString(0));
-        Log.i(TAG, m_title);
-        Log.i(TAG, m_path);
+        Log.d(TAG, "set music: " + m_cursor.getString(0)
+                + ", " + m_title + ", " + m_path);
     }
 
     /**
@@ -80,14 +82,14 @@ public class MusicService extends Service
      */
     @Override
     public IBinder onBind(Intent intent) {
-        Log.i(TAG, "onBind: " + intent);
+        Log.d(TAG, "onBind: " + intent);
         return m_binder;
     }
 
 
     @Override
     public int onStartCommand(Intent intent, int flags, int start_id) {
-        Log.i(TAG, "onStartCommand Received start id " + start_id + ": " + intent);
+        Log.d(TAG, "onStartCommand Received start id " + start_id + ": " + intent);
         //明示的にサービスの起動、停止が決められる場合の返り値
         return START_STICKY;
     }
@@ -97,7 +99,7 @@ public class MusicService extends Service
      */
     @Override
     public void onRebind(Intent intent) {
-        Log.i(TAG, "onRebind: " + intent);
+        Log.d(TAG, "onRebind: " + intent);
     }
 
     /**
@@ -107,7 +109,7 @@ public class MusicService extends Service
      */
     @Override
     public boolean onUnbind(Intent intent) {
-        Log.i(TAG, "onUnbind: " + intent);
+        Log.d(TAG, "onUnbind: " + intent);
         return true;
     }
 
@@ -116,7 +118,7 @@ public class MusicService extends Service
      */
     @Override
     public void onDestroy() {
-        Log.i(TAG, "onDestroy");
+        Log.d(TAG, "onDestroy");
         stopMusic();  // 音楽の停止
     }
 
@@ -125,7 +127,7 @@ public class MusicService extends Service
      * @param player 音楽プレーヤー
      */
     public void onCompletion(MediaPlayer player) {
-        Log.i(TAG, "onCompletion");
+        Log.d(TAG, "onCompletion");
 
         // ループフラグがtrueのとき同じ曲を連続して再生
         if (m_roopflag) {
@@ -166,7 +168,7 @@ public class MusicService extends Service
      * @return m_player.isPlaying()  音楽再生のON・OFF
      */
     public boolean playMusic() {
-        Log.i(TAG, "playMusic");
+        Log.d(TAG, "playMusic");
 
         if (m_player != null) {
             // 音楽プレーヤーが再生中の場合一時停止
@@ -188,7 +190,7 @@ public class MusicService extends Service
      * 前の曲を再生
      */
     public void prevMusic() {
-        Log.i(TAG, "prevMusic");
+        Log.d(TAG, "prevMusic");
 
         // シャッフルがONの場合次の音楽をランダムで指定
         if (m_shuffleflag) {
@@ -201,13 +203,12 @@ public class MusicService extends Service
         }
         m_id = Integer.parseInt(m_cursor.getString(0));
         m_title = m_cursor.getString(1);
-        m_artist = m_cursor.getString(2);
-        m_album = m_cursor.getString(3);
-        m_path = m_cursor.getString(4);
+//        m_artist = m_cursor.getString(2);
+//        m_album = m_cursor.getString(3);
+        m_path = m_cursor.getString(2);
 
-        Log.i(TAG, m_cursor.getString(0));
-        Log.i(TAG, m_title);
-        Log.i(TAG, m_path);
+        Log.d(TAG, "set music: " + m_cursor.getString(0)
+                + ", " + m_title + ", " + m_path);
 
         createMusic();
     }
@@ -229,13 +230,12 @@ public class MusicService extends Service
         }
         m_id = Integer.parseInt(m_cursor.getString(0));
         m_title = m_cursor.getString(1);
-        m_artist = m_cursor.getString(2);
-        m_album = m_cursor.getString(3);
-        m_path = m_cursor.getString(4);
+//        m_artist = m_cursor.getString(2);
+//        m_album = m_cursor.getString(3);
+        m_path = m_cursor.getString(2);
 
-        Log.i(TAG, m_cursor.getString(0));
-        Log.i(TAG, m_title);
-        Log.i(TAG, m_path);
+        Log.d(TAG, "set music: " + m_cursor.getString(0)
+                + ", " + m_title + ", " + m_path);
 
         createMusic();
     }
@@ -304,13 +304,12 @@ public class MusicService extends Service
 
         m_id = Integer.parseInt(m_cursor.getString(0));
         m_title = m_cursor.getString(1);
-        m_artist = m_cursor.getString(2);
-        m_album = m_cursor.getString(3);
-        m_path = m_cursor.getString(4);
+//        m_artist = m_cursor.getString(2);
+//        m_album = m_cursor.getString(3);
+        m_path = m_cursor.getString(2);
 
-        Log.i(TAG, m_cursor.getString(0));
-        Log.i(TAG, m_title);
-        Log.i(TAG, m_path);
+        Log.d(TAG, "set music: " + m_cursor.getString(0)
+                + ", " + m_title + ", " + m_path);
 
         createMusic();
     }
