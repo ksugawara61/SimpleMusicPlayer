@@ -117,8 +117,10 @@ public final class DBConstant {
 
     // 全音楽リスト取得用SQL
     public static final String SELECT_ALL_MUSIC = "select " + COLUMN_MUSIC_ID + ", "
-            + COLUMN_MUSIC_TITLE + ", " + COLUMN_ARTIST_NAME + ", " + COLUMN_MUSIC_PATH + " from "
-//            + COLUMN_ALBUM_NAME + ", " + COLUMN_MUSIC_PATH + " from "
-            + TABLE_MUSIC + " inner join " + TABLE_ARTIST + " on "
-            + TABLE_MUSIC + "." + COLUMN_ARTIST_ID + " = " + TABLE_ARTIST + "." + COLUMN_ARTIST_ID;
+            + COLUMN_MUSIC_TITLE + ", " + COLUMN_ARTIST_NAME + ", "// + COLUMN_MUSIC_PATH + " from "
+            + COLUMN_ALBUM_NAME + ", " + COLUMN_MUSIC_PATH + " from " + TABLE_MUSIC
+            + " inner join " + TABLE_ARTIST + " on " + TABLE_MUSIC + "." + COLUMN_ARTIST_ID
+            + " = " + TABLE_ARTIST + "." + COLUMN_ARTIST_ID + " "
+            + " inner join " + TABLE_ALBUM + " on " + TABLE_MUSIC + "." + COLUMN_ALBUM_ID
+            + " = " + TABLE_ALBUM + "." + COLUMN_ALBUM_ID;
 }

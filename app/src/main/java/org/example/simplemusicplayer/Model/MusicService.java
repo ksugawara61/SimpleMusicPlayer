@@ -312,8 +312,8 @@ public class MusicService extends Service
         m_id = m_cursor.getInt(0);
         m_title = m_cursor.getString(1);
         m_artist = m_cursor.getString(2);
-        m_album = "test";  //m_cursor.getString(3);
-        m_path = m_cursor.getString(3);
+        m_album = m_cursor.getString(3);
+        m_path = m_cursor.getString(4);
 
         Log.d(TAG, "set music: " + m_cursor.getString(0) + ", " + m_title
                 + ", " + m_artist + ", " + m_artist + ", " + m_path);
