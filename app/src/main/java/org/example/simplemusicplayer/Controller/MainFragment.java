@@ -41,7 +41,6 @@ public class MainFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         Log.d(TAG, "onCreate");
-        doBindService();  // サービスをバインド
     }
 
     /**
@@ -55,6 +54,7 @@ public class MainFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                             Bundle savedInstanceState) {
 
+        Log.d(TAG, "onCreateView");
         View root_view = inflater.inflate(R.layout.fragment_main, container, false);
 
         // メンバ変数に格納
@@ -85,6 +85,16 @@ public class MainFragment extends Fragment {
         m_shuffle_button.setOnClickListener(btnListener);
 
         return root_view;
+    }
+
+    /**
+     * サービスの開始
+     */
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.d(TAG, "onStart");
+        doBindService();  // サービスをバインド
     }
 
     /**

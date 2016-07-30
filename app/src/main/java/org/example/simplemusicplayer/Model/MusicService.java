@@ -56,14 +56,20 @@ public class MusicService extends Service
         Log.d(TAG, "onCreate");
 
         // DBの更新
-//        deleteDatabase(DB_NAME);
         m_adapter = new MusicDBAdapter(this, DB_NAME, null, 1);
-//        m_adapter.insertMusic();  // TODO 処理が重いのでThredに変える
 
         // 音楽ファイルの先頭のレコードを初期値として設定
         Log.d(TAG, SELECT_ALL_MUSIC);
         m_cursor = m_adapter.rawQueryMusic(SELECT_ALL_MUSIC, null);
         m_musiclen = m_cursor.getCount();  // レコード数を取得
+
+        // レコード数が 0 のとき初期設定でデータを取得する
+        if (m_musiclen == 0) {
+            m_adapter.insertMusic();  // TODO 処理が重いのでThredに変える
+            m_cursor = m_adapter.rawQueryMusic(SELECT_ALL_MUSIC, null);
+            m_musiclen = m_cursor.getCount();  // レコード数を取得
+        }
+
         m_cursor.moveToFirst();
         setMusicInfo();
     }
