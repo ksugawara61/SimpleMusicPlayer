@@ -4,6 +4,8 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.graphics.BitmapFactory;
+import android.media.MediaMetadataRetriever;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.Fragment;
@@ -12,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,6 +31,7 @@ public class MainFragment extends Fragment {
     private boolean m_isbound;
 
     // ビューの変化する箇所
+    private ImageView m_thumbnail;
     private TextView m_title_text;
     private TextView m_artist_text;
     private ImageButton m_loop_button;    // ループボタン
@@ -55,6 +59,8 @@ public class MainFragment extends Fragment {
         View root_view = inflater.inflate(R.layout.fragment_main, container, false);
 
         // メンバ変数に格納
+        m_thumbnail = (ImageView)root_view.findViewById(R.id.thumbnail);
+        m_thumbnail.setImageResource(R.drawable.no_image);
         m_title_text = (TextView)root_view.findViewById(R.id.title);
         m_artist_text = (TextView)root_view.findViewById(R.id.artist);
 
@@ -111,10 +117,7 @@ public class MainFragment extends Fragment {
                 case R.id.play_button:
                     Log.d(TAG, "push play button");
                     if (m_service.playMusic()) {
-                        // 曲のタイトルを設定
-                        m_title_text.setText(m_service.getMusicTitle());
-                        m_artist_text.setText(m_service.getMusicArtist() + " - "
-                                + m_service.getMusicAlbum());
+                        setMusicInfo();
                         m_play_button.setImageResource(R.drawable.ic_pause_black_24dp);
                     }
                     else {
@@ -126,21 +129,14 @@ public class MainFragment extends Fragment {
                 case R.id.prev_button:
                     Log.d(TAG, "push prev button");
                     m_service.prevMusic();
-
-                    // 曲のタイトルを設定
-                    m_title_text.setText(m_service.getMusicTitle());
-                    m_artist_text.setText(m_service.getMusicArtist() + " - "
-                            + m_service.getMusicAlbum());
+                    setMusicInfo();
                     break;
 
                 // 次へボタン押下時の処理
                 case R.id.next_button:
                     Log.d(TAG, "push next button");
                     m_service.nextMusic();
-
-                    m_title_text.setText(m_service.getMusicTitle());
-                    m_artist_text.setText(m_service.getMusicArtist() + " - "
-                            + m_service.getMusicAlbum());
+                    setMusicInfo();
                     break;
 
                 // ループボタン押下時の処理
@@ -174,6 +170,29 @@ public class MainFragment extends Fragment {
             }
         }
     };
+
+    /**
+     * 音楽ファイルの情報をメイン画面に設定
+     */
+    private void setMusicInfo() {
+        // サムネイル画像を設定
+        MediaMetadataRetriever media_data = new MediaMetadataRetriever();
+        media_data.setDataSource(m_service.getMusicPath());
+        byte[] thumbnail_image =media_data.getEmbeddedPicture();
+        if (thumbnail_image != null) {
+            m_thumbnail.setImageBitmap(BitmapFactory.decodeByteArray(thumbnail_image,
+                    0, thumbnail_image.length));
+        }
+        // サムネイル画像がない場合 No Image画像を表示
+        else {
+            m_thumbnail.setImageResource(R.drawable.no_image);
+        }
+
+        // 曲のタイトルを設定
+        m_title_text.setText(m_service.getMusicTitle());
+        m_artist_text.setText(m_service.getMusicArtist() + " - "
+                + m_service.getMusicAlbum());
+    }
 
     /**
      * サービスのコネクション関連処理

@@ -150,6 +150,14 @@ public class MusicService extends Service
     }
 
     /**
+     * 再生している音楽のパスを取得
+     * @return m_path 音楽のパス
+     */
+    public String getMusicPath() {
+        return m_path;
+    }
+
+    /**
      * 音楽の再生
      * @return m_player.isPlaying()  音楽再生のON・OFF
      */
