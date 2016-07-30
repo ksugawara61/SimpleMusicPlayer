@@ -1,3 +1,8 @@
 <resources>
-    <string name="app_name">SimpleMusicPlayer</string>
+    <string name="app_name">Simple Music</string>
+    <string name="ok_label">OK</string>
+    <string name="help_label">ヘルプ</string>
+    <string name="help_text">\
+        このアプリケーションはシンプルなミュージックプレーヤーです。
+    </string>
 </resources>

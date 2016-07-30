@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -59,6 +60,9 @@ public class MainFragment extends Fragment {
         // メンバ変数に格納
         m_title_text = (TextView)root_view.findViewById(R.id.title);
         m_artist_text = (TextView)root_view.findViewById(R.id.artist);
+
+        // 設定メニューのイベントを作成
+        //m_main_setting = root_view.findViewById(R.id.main_setting);
 
         // 再生ボタンのイベントを作成
         m_play_button = (ImageButton)root_view.findViewById(R.id.play_button);
