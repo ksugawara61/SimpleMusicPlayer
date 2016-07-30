@@ -147,9 +147,12 @@ public class MusicDBAdapter {
     }
 
     /**
-     * DBに音楽の情報（アーティスト名・アルバム名・ジャンル名を格納しIDを返す
-     * @param
-     * @return id 各情報のID
+     * DBに音楽の情報（アーティスト名・アルバム名・ジャンル名）を格納しIDを返す
+     * @param table_name 情報を格納するテーブル名
+     * @param value_name 格納する情報に対応するカラム名
+     * @param value      格納する情報
+     * @param select_sql IDを取得するためのSQL
+     * @return 各情報のID
      */
     String insertMusicInfo(String table_name, String value_name, String value, String select_sql) {
         Log.d(TAG, "insertMusicInfo");
