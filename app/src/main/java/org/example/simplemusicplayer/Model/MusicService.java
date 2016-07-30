@@ -113,6 +113,7 @@ public class MusicService extends Service
     public void onDestroy() {
         Log.d(TAG, "onDestroy");
         stopMusic();  // 音楽の停止
+        m_cursor.close();
     }
 
     /**
@@ -269,7 +270,6 @@ public class MusicService extends Service
             m_player.setOnCompletionListener(null);
             m_player.release();
             m_player = null;
-            m_cursor.close();
         }
     }
 
