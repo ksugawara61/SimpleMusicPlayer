@@ -65,14 +65,7 @@ public class MusicService extends Service
         m_cursor = m_adapter.rawQueryMusic(SELECT_ALL_MUSIC, null);
         m_musiclen = m_cursor.getCount();  // レコード数を取得
         m_cursor.moveToFirst();
-        m_id = m_cursor.getInt(0);
-        m_title = m_cursor.getString(1);
-        m_artist = m_cursor.getString(2);
-        m_album = "test";  //m_cursor.getString(3);
-        m_path = m_cursor.getString(3);
-
-        Log.d(TAG, "set music: " + m_cursor.getString(0)
-                + ", " + m_title + ", " + m_path);
+        setMusicInfo();
     }
 
     /**
@@ -201,15 +194,7 @@ public class MusicService extends Service
         if(!m_cursor.moveToPrevious()) {
             m_cursor.moveToLast();
         }
-        m_id = Integer.parseInt(m_cursor.getString(0));
-        m_title = m_cursor.getString(1);
-        m_artist = m_cursor.getString(2);
-//        m_album = m_cursor.getString(3);
-        m_path = m_cursor.getString(3);
-
-        Log.d(TAG, "set music: " + m_cursor.getString(0)
-                + ", " + m_title + ", " + m_path);
-
+        setMusicInfo();
         createMusic();
     }
 
@@ -228,15 +213,7 @@ public class MusicService extends Service
         if(!m_cursor.moveToNext()) {
             m_cursor.moveToFirst();
         }
-        m_id = Integer.parseInt(m_cursor.getString(0));
-        m_title = m_cursor.getString(1);
-        m_artist = m_cursor.getString(2);
-//        m_album = m_cursor.getString(3);
-        m_path = m_cursor.getString(3);
-
-        Log.d(TAG, "set music: " + m_cursor.getString(0)
-                + ", " + m_title + ", " + m_path);
-
+        setMusicInfo();
         createMusic();
     }
 
@@ -301,16 +278,7 @@ public class MusicService extends Service
     private void shuffleMusic() {
         Log.i(TAG, "shuffleMusic");
         m_cursor.moveToPosition(m_rand.nextInt(m_musiclen));
-
-        m_id = Integer.parseInt(m_cursor.getString(0));
-        m_title = m_cursor.getString(1);
-        m_artist = m_cursor.getString(2);
-//        m_album = m_cursor.getString(3);
-        m_path = m_cursor.getString(3);
-
-        Log.d(TAG, "set music: " + m_cursor.getString(0)
-                + ", " + m_title + ", " + m_path);
-
+        setMusicInfo();
         createMusic();
     }
 
@@ -334,5 +302,20 @@ public class MusicService extends Service
         catch (IOException e) {
             Log.e(TAG, e.toString());
         }
+    }
+
+    /**
+     * 音楽の情報をセットする
+     */
+    private void setMusicInfo() {
+        Log.d(TAG, "setMusicInfo");
+        m_id = m_cursor.getInt(0);
+        m_title = m_cursor.getString(1);
+        m_artist = m_cursor.getString(2);
+        m_album = "test";  //m_cursor.getString(3);
+        m_path = m_cursor.getString(3);
+
+        Log.d(TAG, "set music: " + m_cursor.getString(0) + ", " + m_title
+                + ", " + m_artist + ", " + m_artist + ", " + m_path);
     }
 }
