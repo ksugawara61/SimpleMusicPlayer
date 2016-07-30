@@ -107,4 +107,13 @@ public final class DBConstant {
     public static final String DROP_TABLE_PLAYLIST = "drop table " + TABLE_PLAYLIST;
     public static final String DROP_TABLE_PLAYLIST_MAP = "drop table " + TABLE_PLAYLIST_MAP;
 
+    // ARTIST_ID取得用SQL
+    public static final String SELECT_ARTIST_ID = "select " + COLUMN_ARTIST_ID + " from "
+            + TABLE_ARTIST + " where " + COLUMN_ARTIST_NAME + " = ? limit 1";
+
+    public static final String SELECT_ALL_MUSIC = "select " + COLUMN_MUSIC_ID + ", "
+            + COLUMN_MUSIC_TITLE + ", " + COLUMN_ARTIST_NAME + ", " + COLUMN_MUSIC_PATH + " from "
+//            + COLUMN_ALBUM_NAME + ", " + COLUMN_MUSIC_PATH + " from "
+            + TABLE_MUSIC + " inner join " + TABLE_ARTIST + " on "
+            + TABLE_MUSIC + "." + COLUMN_ARTIST_ID + " = " + TABLE_ARTIST + "." + COLUMN_ARTIST_ID;
 }

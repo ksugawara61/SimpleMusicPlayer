@@ -56,20 +56,20 @@ public class MusicService extends Service
         Log.d(TAG, "onCreate");
 
         // DBの更新
+        deleteDatabase("simplemusicplayer.db");
         m_adapter = new MusicDBAdapter(this, "simplemusicplayer.db", null, 1);
         m_adapter.insertMusic();  // TODO 処理が重いのでThredに変える
 
         // 音楽ファイルの先頭のレコードを初期値として設定
-        m_cursor = m_adapter.rawQueryMusic("select " + COLUMN_MUSIC_ID + ", "
-                + COLUMN_MUSIC_TITLE + ", " + COLUMN_MUSIC_PATH + " from "
-                + TABLE_MUSIC, null);
+        Log.d(TAG, SELECT_ALL_MUSIC);
+        m_cursor = m_adapter.rawQueryMusic(SELECT_ALL_MUSIC, null);
         m_musiclen = m_cursor.getCount();  // レコード数を取得
         m_cursor.moveToFirst();
-        m_id = Integer.parseInt(m_cursor.getString(0));
+        m_id = m_cursor.getInt(0);
         m_title = m_cursor.getString(1);
-        m_artist = "test";  //m_cursor.getString(2);
+        m_artist = m_cursor.getString(2);
         m_album = "test";  //m_cursor.getString(3);
-        m_path = m_cursor.getString(2);
+        m_path = m_cursor.getString(3);
 
         Log.d(TAG, "set music: " + m_cursor.getString(0)
                 + ", " + m_title + ", " + m_path);
@@ -203,9 +203,9 @@ public class MusicService extends Service
         }
         m_id = Integer.parseInt(m_cursor.getString(0));
         m_title = m_cursor.getString(1);
-//        m_artist = m_cursor.getString(2);
+        m_artist = m_cursor.getString(2);
 //        m_album = m_cursor.getString(3);
-        m_path = m_cursor.getString(2);
+        m_path = m_cursor.getString(3);
 
         Log.d(TAG, "set music: " + m_cursor.getString(0)
                 + ", " + m_title + ", " + m_path);
@@ -230,9 +230,9 @@ public class MusicService extends Service
         }
         m_id = Integer.parseInt(m_cursor.getString(0));
         m_title = m_cursor.getString(1);
-//        m_artist = m_cursor.getString(2);
+        m_artist = m_cursor.getString(2);
 //        m_album = m_cursor.getString(3);
-        m_path = m_cursor.getString(2);
+        m_path = m_cursor.getString(3);
 
         Log.d(TAG, "set music: " + m_cursor.getString(0)
                 + ", " + m_title + ", " + m_path);
@@ -304,9 +304,9 @@ public class MusicService extends Service
 
         m_id = Integer.parseInt(m_cursor.getString(0));
         m_title = m_cursor.getString(1);
-//        m_artist = m_cursor.getString(2);
+        m_artist = m_cursor.getString(2);
 //        m_album = m_cursor.getString(3);
-        m_path = m_cursor.getString(2);
+        m_path = m_cursor.getString(3);
 
         Log.d(TAG, "set music: " + m_cursor.getString(0)
                 + ", " + m_title + ", " + m_path);

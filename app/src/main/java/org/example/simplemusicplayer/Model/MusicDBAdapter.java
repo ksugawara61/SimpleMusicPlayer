@@ -113,6 +113,12 @@ public class MusicDBAdapter {
             Log.d(TAG, "music: " + title + " - " + artist + " - " + album + " - " + path);
 
             // アーティスト名をテーブルに格納する処理を実装
+            String artist_id = null;
+            if (artist != null) {
+                artist_id = insertMusicInfo(TABLE_ARTIST, COLUMN_ARTIST_NAME,
+                        artist, SELECT_ARTIST_ID);
+                Log.d(TAG, "artist_id: " + artist_id);
+            }
 
             // アルバム名をテーブルに格納する処理を実装
 
@@ -121,17 +127,41 @@ public class MusicDBAdapter {
             // 音楽テーブルに格納するパラメータを付与
             ContentValues values = new ContentValues();
             values.put(COLUMN_MUSIC_TITLE, title);
-//            values.put("music_artist", artist);
+            values.put(COLUMN_ARTIST_ID, artist_id);
 //            values.put("music_album", album);
             values.put(COLUMN_MUSIC_PATH, path);
 
             // 既にDBに登録されているレコードか確認し、登録されていない場合新規追加
-            String[] where_args = {title};
             int update_num = db.update(TABLE_MUSIC, values,
-                    COLUMN_MUSIC_TITLE + " = ?", where_args);
+                    COLUMN_MUSIC_TITLE + " = ?", new String[]{title});
             if (update_num == 0) {
                 db.insert(TABLE_MUSIC, "", values);
             }
         }
+    }
+
+    /**
+     * DBに音楽の情報（アーティスト名・アルバム名・ジャンル名を格納しIDを返す
+     * @param
+     * @return id 各情報のID
+     */
+    String insertMusicInfo(String table_name, String value_name, String value, String select_sql) {
+        Log.d(TAG, "insertMusicInfo");
+        String id = null;
+
+        ContentValues values = new ContentValues();
+        values.put(value_name, value);
+        int update_num = db.update(table_name, values,
+                value_name + " = ?", new String[]{value});
+        if (update_num == 0) {
+            db.insert(table_name, "", values);
+        }
+        Cursor cursor = db.rawQuery(select_sql, new String[]{value});
+        if (cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            id = cursor.getString(0);
+        }
+
+        return id;
     }
 }
