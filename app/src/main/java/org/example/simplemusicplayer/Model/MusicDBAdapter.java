@@ -121,6 +121,12 @@ public class MusicDBAdapter {
             }
 
             // アルバム名をテーブルに格納する処理を実装
+            String album_id = null;
+            if (album != null) {
+                album_id = insertMusicInfo(TABLE_ALBUM, COLUMN_ALBUM_NAME,
+                        album, SELECT_ALBUM_ID);
+                Log.d(TAG, "album_id: " + album_id);
+            }
 
             // ジャンル名をテーブルに格納する処理を実装
 
@@ -128,7 +134,7 @@ public class MusicDBAdapter {
             ContentValues values = new ContentValues();
             values.put(COLUMN_MUSIC_TITLE, title);
             values.put(COLUMN_ARTIST_ID, artist_id);
-//            values.put("music_album", album);
+            values.put(COLUMN_ALBUM_ID, album_id);
             values.put(COLUMN_MUSIC_PATH, path);
 
             // 既にDBに登録されているレコードか確認し、登録されていない場合新規追加
