@@ -269,6 +269,7 @@ public class MusicService extends Service
             m_player.setOnCompletionListener(null);
             m_player.release();
             m_player = null;
+            m_cursor.close();
         }
     }
 

@@ -171,6 +171,8 @@ public class MusicDBAdapter {
             id = cursor.getString(0);
         }
 
+        cursor.close();
+
         return id;
     }
 }
