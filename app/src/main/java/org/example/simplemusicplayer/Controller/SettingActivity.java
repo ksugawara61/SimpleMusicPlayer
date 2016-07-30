@@ -4,8 +4,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
-import org.example.simplemusicplayer.R;
-
 /**
  * Created by katsuya on 16/07/30.
  * 設定画面のアクティビティ
@@ -18,7 +16,8 @@ public class SettingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate");
-        setContentView(R.layout.activity_setting);
+        getFragmentManager().beginTransaction().replace(android.R.id.content,
+                new SettingFragment()).commit();
     }
 
 }

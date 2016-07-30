@@ -5,4 +5,12 @@
     <string name="help_text">\
         このアプリケーションはシンプルなミュージックプレーヤーです。
     </string>
+
+    <!-- 設定画面のテキスト -->
+    <string name="folder_setting_title">フォルダ設定</string>
+    <string name="folder_scan_title">フォルダスキャン</string>
+    <string name="folder_scan_summary">音楽フォルダから音楽ファイルを探索します</string>
+    <string name="folder_path_title">音楽フォルダ</string>
+    <string name="folder_path_summary">音楽ファイルを保存しているフォルダを指定します</string>
+
 </resources>
