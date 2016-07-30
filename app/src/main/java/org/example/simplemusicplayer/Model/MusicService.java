@@ -56,8 +56,8 @@ public class MusicService extends Service
         Log.d(TAG, "onCreate");
 
         // DBの更新
-//        deleteDatabase("simplemusicplayer.db");
-        m_adapter = new MusicDBAdapter(this, "simplemusicplayer.db", null, 1);
+//        deleteDatabase(DB_NAME);
+        m_adapter = new MusicDBAdapter(this, DB_NAME, null, 1);
 //        m_adapter.insertMusic();  // TODO 処理が重いのでThredに変える
 
         // 音楽ファイルの先頭のレコードを初期値として設定

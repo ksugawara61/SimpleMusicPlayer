@@ -10,6 +10,9 @@ public final class DBConstant {
 
     private DBConstant() {}  // インスタンス化できないように実装
 
+    // DB名
+    public static final String DB_NAME = "simplemusicplayer.db";
+
     // テーブル名
     public static final String TABLE_MUSIC = "music";
     public static final String TABLE_ARTIST = "artist";
