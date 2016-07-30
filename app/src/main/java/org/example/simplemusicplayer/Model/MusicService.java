@@ -41,10 +41,11 @@ public class MusicService extends Service
     private Random m_rand = new Random();   // シャッフル用の乱数
     private int m_id;
     private Cursor m_cursor;
-    private String m_title;
-    private String m_artist;
-    private String m_album;
-    private String m_path;
+    private String m_title = "No title";
+    private String m_artist = "No artist";
+    private String m_album = "No album";
+    private String m_path = null;
+    private boolean m_runflag = false;  // 実行可能かどうかを判定するフラグ
     private boolean m_roopflag = false; // ループフラグ
     private boolean m_shuffleflag = false;  // シャッフルフラグ
 
@@ -56,22 +57,7 @@ public class MusicService extends Service
         Log.d(TAG, "onCreate");
 
         // DBの更新
-        m_adapter = new MusicDBAdapter(this, DB_NAME, null, 1);
-
-        // 音楽ファイルの先頭のレコードを初期値として設定
-        Log.d(TAG, SELECT_ALL_MUSIC);
-        m_cursor = m_adapter.rawQueryMusic(SELECT_ALL_MUSIC, null);
-        m_musiclen = m_cursor.getCount();  // レコード数を取得
-
-        // レコード数が 0 のとき初期設定でデータを取得する
-        if (m_musiclen == 0) {
-            m_adapter.insertMusic();
-            m_cursor = m_adapter.rawQueryMusic(SELECT_ALL_MUSIC, null);
-            m_musiclen = m_cursor.getCount();  // レコード数を取得
-        }
-
-        m_cursor.moveToFirst();
-        setMusicInfo();
+        getMusicRecord();
     }
 
     /**
@@ -182,8 +168,8 @@ public class MusicService extends Service
                 return m_player.isPlaying();
             }
         }
-        createMusic();
-        return m_player.isPlaying();
+
+        return createMusic(); //m_player.isPlaying();
     }
 
     /**
@@ -201,7 +187,6 @@ public class MusicService extends Service
         if(!m_cursor.moveToPrevious()) {
             m_cursor.moveToLast();
         }
-        setMusicInfo();
         createMusic();
     }
 
@@ -220,7 +205,6 @@ public class MusicService extends Service
         if(!m_cursor.moveToNext()) {
             m_cursor.moveToFirst();
         }
-        setMusicInfo();
         createMusic();
     }
 
@@ -285,37 +269,44 @@ public class MusicService extends Service
     private void shuffleMusic() {
         Log.i(TAG, "shuffleMusic");
         m_cursor.moveToPosition(m_rand.nextInt(m_musiclen));
-        setMusicInfo();
         createMusic();
     }
 
     /**
-     * 音楽のインスタンスを生成し曲を再生する
+     * DBから音楽のレコードを取得
      */
-    private void createMusic() {
+    private void getMusicRecord() {
+        Log.d(TAG, "getMusicRecord");
+
+        // 音楽ファイルの先頭のレコードを初期値として設定
+        m_adapter = new MusicDBAdapter(this, DB_NAME, null, 1);
+        m_cursor = m_adapter.rawQueryMusic(SELECT_ALL_MUSIC, null);
+        m_musiclen = m_cursor.getCount();  // レコード数を取得
+        m_runflag = m_cursor.moveToFirst();
+    }
+
+    /**
+     * 音楽のインスタンスを生成し曲を再生する
+     * @return true インスタンスの生成成功, false インスタンスの生成失敗
+     */
+    private boolean createMusic() {
+        Log.d(TAG, "createMusic");
+
         //前の音楽情報が残っている場合削除
         if (m_player != null) {
             m_player.stop();
             m_player.release();
         }
 
-        m_player = new MediaPlayer();
-        try {
-            m_player.setDataSource(m_path);
-            m_player.prepare();
-            m_player.start();
-            m_player.setOnCompletionListener(this);
-        }
-        catch (IOException e) {
-            Log.e(TAG, e.toString());
-        }
-    }
+        // 実行不可能な場合レコード情報を更新し、DBの情報を更新して実行可能な場合先に進む
+        if (!m_runflag) {
+            getMusicRecord();
+            if (!m_runflag) {
+                return false;
+            }
+        };
 
-    /**
-     * 音楽の情報をセットする
-     */
-    private void setMusicInfo() {
-        Log.d(TAG, "setMusicInfo");
+        // 音楽の情報をセットする
         m_id = m_cursor.getInt(0);
         m_title = m_cursor.getString(1);
         m_artist = m_cursor.getString(2);
@@ -324,5 +315,19 @@ public class MusicService extends Service
 
         Log.d(TAG, "set music: " + m_cursor.getString(0) + ", " + m_title
                 + ", " + m_artist + ", " + m_artist + ", " + m_path);
+
+        m_player = new MediaPlayer();
+        try {
+            m_player.setDataSource(m_path);
+            m_player.prepare();
+            m_player.start();
+            m_player.setOnCompletionListener(this);
+            return true;
+        }
+        catch (IOException e) {
+            Log.e(TAG, e.toString());
+            return false;
+        }
     }
+
 }

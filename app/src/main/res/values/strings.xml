@@ -1,6 +1,12 @@
 <resources>
     <string name="app_name">Simple Music</string>
     <string name="ok_label">OK</string>
+
+    <!-- 音楽ファイル用のテキスト -->
+    <string name="initial_title">No title</string>
+    <string name="initial_artist">No artist - No album</string>
+
+    <!-- ヘルプ用のテキスト -->
     <string name="help_label">ヘルプ</string>
     <string name="help_text">\
         このアプリケーションはシンプルなミュージックプレーヤーです。
