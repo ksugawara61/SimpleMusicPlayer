@@ -18,27 +18,6 @@ public class DBHelper extends SQLiteOpenHelper {
 
     private static final String TAG = "DBHelper";
 
-    /*// テーブル名
-    private static final String TABLE_MUSIC = "music";
-    private static final String TABLE_ARTIST = "artist";
-    private static final String TABLE_GENRE = "genre";
-    private static final String TABLE_ALBUM = "album";
-    private static final String TABLE_PLAYLIST = "playlist";
-    private static final String TABLE_PLAYLIST_MAP = "playlist_map";
-
-    // テーブル生成用SQL
-    private static final String CREATE_TABLE_MUSIC = "create table if not exists "
-            + TABLE_MUSIC + " ("
-            + "music_id" + " integer primary key autoincrement not null, "
-            + "music_title" + " text not null, "
-            + "music_artist" + " text, "
-            + "music_album" + " text, "
-            + "music_path" + " text not null"
-            + ")";
-
-    // テーブル削除用SQL
-    private static final String DROP_TABLE_MUSIC = "drop table " + TABLE_MUSIC;*/
-
     /**
      * コンストラクタ
      * @param context コンテキスト
