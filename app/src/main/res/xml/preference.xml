@@ -2,11 +2,11 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory android:title="フォルダ設定">
-        <CheckBoxPreference
+        <Preference
             android:key="folder_scan"
             android:title="@string/folder_scan_title"
             android:summary="@string/folder_scan_summary"/>
-        <CheckBoxPreference
+        <Preference
             android:key="folder_path"
             android:title="@string/folder_path_title"
             android:summary="@string/folder_path_summary"/>

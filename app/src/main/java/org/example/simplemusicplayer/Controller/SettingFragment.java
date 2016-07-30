@@ -1,8 +1,11 @@
 package org.example.simplemusicplayer.Controller;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
+import android.support.v4.app.NavUtils;
 import android.util.Log;
+import android.view.MenuItem;
 
 import org.example.simplemusicplayer.R;
 
@@ -20,4 +23,5 @@ public class SettingFragment extends PreferenceFragment {
         Log.d(TAG, "onCreate");
         addPreferencesFromResource(R.xml.preference);
     }
+
 }
