@@ -7,10 +7,8 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -39,7 +37,6 @@ public class MainFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         Log.d(TAG, "onCreate");
     }
 
@@ -60,9 +57,6 @@ public class MainFragment extends Fragment {
         // メンバ変数に格納
         m_title_text = (TextView)root_view.findViewById(R.id.title);
         m_artist_text = (TextView)root_view.findViewById(R.id.artist);
-
-        // 設定メニューのイベントを作成
-        //m_main_setting = root_view.findViewById(R.id.main_setting);
 
         // 再生ボタンのイベントを作成
         m_play_button = (ImageButton)root_view.findViewById(R.id.play_button);
@@ -91,9 +85,9 @@ public class MainFragment extends Fragment {
      * サービスの開始
      */
     @Override
-    public void onStart() {
-        super.onStart();
-        Log.d(TAG, "onStart");
+    public void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume");
         doBindService();  // サービスをバインド
     }
 
@@ -107,8 +101,6 @@ public class MainFragment extends Fragment {
         Log.d(TAG, "onDestroy");
     }
 
-
-
     /**
      * ボタンのクリックイベント
      */
@@ -117,7 +109,7 @@ public class MainFragment extends Fragment {
             switch(view.getId()) {
                 // 再生ボタン押下時の処理
                 case R.id.play_button:
-                    Log.i(TAG, "push play button");
+                    Log.d(TAG, "push play button");
                     if (m_service.playMusic()) {
                         // 曲のタイトルを設定
                         m_title_text.setText(m_service.getMusicTitle());
@@ -132,7 +124,7 @@ public class MainFragment extends Fragment {
 
                 // 前へボタン押下時の処理
                 case R.id.prev_button:
-                    Log.i(TAG, "push prev button");
+                    Log.d(TAG, "push prev button");
                     m_service.prevMusic();
 
                     // 曲のタイトルを設定
@@ -143,7 +135,7 @@ public class MainFragment extends Fragment {
 
                 // 次へボタン押下時の処理
                 case R.id.next_button:
-                    Log.i(TAG, "push next button");
+                    Log.d(TAG, "push next button");
                     m_service.nextMusic();
 
                     m_title_text.setText(m_service.getMusicTitle());
@@ -153,7 +145,7 @@ public class MainFragment extends Fragment {
 
                 // ループボタン押下時の処理
                 case R.id.loop_button:
-                    Log.i(TAG, "push loop button");
+                    Log.d(TAG, "push loop button");
                     if (m_service.setRoopMusic()) {
                         m_loop_button.setImageResource(R.drawable.ic_repeat_black_24dp);
                         Toast.makeText(getContext(), "ループをONに設定しました", Toast.LENGTH_SHORT).show();
@@ -166,7 +158,7 @@ public class MainFragment extends Fragment {
 
                 // シャッフルボタン押下時の処理
                 case R.id.shuffle_button:
-                    Log.i(TAG, "push shuffle button");
+                    Log.d(TAG, "push shuffle button");
                     if (m_service.setShuffleMusic()) {
                         m_shuffle_button.setImageResource(R.drawable.ic_shuffle_black_24dp);
                         Toast.makeText(getContext(), "シャッフルをONに設定しました", Toast.LENGTH_SHORT).show();
@@ -193,7 +185,7 @@ public class MainFragment extends Fragment {
          * @param service
          */
         public void onServiceConnected(ComponentName class_name, IBinder service) {
-            Log.i(TAG, "onServiceConnected");
+            Log.d(TAG, "onServiceConnected");
             m_service = ((MusicService.MusicBinder)service).getService();
         }
 
@@ -202,7 +194,7 @@ public class MainFragment extends Fragment {
          * @param class_name
          */
         public void onServiceDisconnected(ComponentName class_name) {
-            Log.i(TAG, "onServiceDisconnected");
+            Log.d(TAG, "onServiceDisconnected");
             m_service = null;
         }
     };
@@ -211,6 +203,7 @@ public class MainFragment extends Fragment {
      * サービスをバインド（接続）
      */
     void doBindService() {
+        Log.d(TAG, "doBindService");
         getActivity().bindService(new Intent(getActivity(), MusicService.class),
                 m_connection, Context.BIND_AUTO_CREATE);
         m_isbound = true;
@@ -220,10 +213,12 @@ public class MainFragment extends Fragment {
      * サービスをアンバインド（切断）
      */
     void doUnbindService() {
+        Log.d(TAG, "doUnbindService");
         if (m_isbound) {
             // コネクションの解除
             getActivity().unbindService(m_connection);
             m_isbound = false;
         }
     }
+
 }

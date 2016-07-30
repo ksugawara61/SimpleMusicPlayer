@@ -55,6 +55,7 @@ public class SettingFragment extends PreferenceFragment
                 m_progress = new ProgressDialog(getActivity());
                 m_progress.setIndeterminate(true);
                 m_progress.setMessage("Loading...");
+                m_progress.setCancelable(false);  // 戻るボタンを無効化
                 m_progress.show();
 
                 // DBの更新処理の時間がかかるためスレッドで呼び出す

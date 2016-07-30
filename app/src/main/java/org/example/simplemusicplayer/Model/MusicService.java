@@ -65,7 +65,7 @@ public class MusicService extends Service
 
         // レコード数が 0 のとき初期設定でデータを取得する
         if (m_musiclen == 0) {
-            m_adapter.insertMusic();  // TODO 処理が重いのでThredに変える
+            m_adapter.insertMusic();
             m_cursor = m_adapter.rawQueryMusic(SELECT_ALL_MUSIC, null);
             m_musiclen = m_cursor.getCount();  // レコード数を取得
         }
