@@ -19,6 +19,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".Controller.SettingActivity" />
 
         <!-- 音楽サービス利用の許可 -->
         <service android:name=".Model.MusicService" />
