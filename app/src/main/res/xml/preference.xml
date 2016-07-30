@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory android:title="フォルダ設定">
+    <PreferenceCategory android:title="@string/folder_setting_title">
         <Preference
             android:key="folder_scan"
             android:title="@string/folder_scan_title"
@@ -10,6 +10,12 @@
             android:key="folder_path"
             android:title="@string/folder_path_title"
             android:summary="@string/folder_path_summary"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/other_setting_title">
+        <Preference
+            android:title="@string/version_title"
+            android:summary="@string/version_num"/>
     </PreferenceCategory>
 
 </PreferenceScreen>

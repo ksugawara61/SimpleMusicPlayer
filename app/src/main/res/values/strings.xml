@@ -12,5 +12,8 @@
     <string name="folder_scan_summary">音楽フォルダから音楽ファイルを探索します</string>
     <string name="folder_path_title">音楽フォルダ</string>
     <string name="folder_path_summary">音楽ファイルを保存しているフォルダを指定します</string>
+    <string name="other_setting_title">その他</string>
+    <string name="version_title">バージョン情報</string>
+    <string name="version_num">1.0.0</string>
 
 </resources>
