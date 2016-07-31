@@ -6,18 +6,25 @@
     android:layout_height="match_parent"
     tools:context=".Controller.MainActivity">
 
-    <ImageView
-        android:id="@+id/thumbnail"
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="10"
-        android:scaleType="fitXY" />
+        android:layout_weight="10">
+
+        <ImageView
+            android:id="@+id/thumbnail"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop" />
+
+    </LinearLayout>
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="5"
+        android:layout_weight="4"
         android:background="#B1D6DC" >
 
         <!--Button
@@ -38,7 +45,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
-                android:layout_weight="2"
+                android:layout_weight="1"
                 android:paddingTop="10sp"
                 android:paddingLeft="20sp"
                 android:paddingRight="20sp"
@@ -81,13 +88,45 @@
 
         </LinearLayout>
 
-        <SeekBar
+        <!-- シークバーのレイアウト -->
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:progress="0"
-            android:max="100"
-            android:id="@+id/SeekBar" />
+            android:layout_weight="1">
+
+            <SeekBar
+                android:id="@+id/seek_bar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:max="100"
+                android:progress="0" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/progress_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:paddingLeft="10sp"
+                    android:text="00:00" />
+
+                <TextView
+                    android:id="@+id/max_time"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingRight="10sp"
+                    android:gravity="right"
+                    android:text="00:00" />
+
+            </LinearLayout>
+
+        </LinearLayout>
 
         <LinearLayout
             android:orientation="horizontal"
