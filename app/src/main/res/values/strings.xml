@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Simple Music</string>
     <string name="ok_label">OK</string>
+    <string name="action_search">検索</string>
 
     <!-- 音楽ファイル用のテキスト -->
     <string name="initial_title">No title</string>

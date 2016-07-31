@@ -5,6 +5,14 @@
     tools:context="org.example.simplemusicplayer.MainActivity">
 
     <item
+        android:id="@+id/action_search"
+        android:icon="@drawable/ic_search_white_24dp"
+        android:orderInCategory="100"
+        app:showAsAction="ifRoom|collapseActionView"
+        app:actionViewClass="android.support.v7.widget.SearchView"
+        android:title="@string/action_search"/>
+
+    <item
         android:id="@+id/main_settings"
         android:orderInCategory="100"
         android:title="設定"
