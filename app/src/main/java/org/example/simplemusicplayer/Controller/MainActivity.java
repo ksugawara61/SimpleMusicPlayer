@@ -33,6 +33,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         Log.d(TAG, "onCreateOptionsMenu");
+        getSupportActionBar().setDisplayShowTitleEnabled(false);  // タイトルを非表示
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setIcon(R.drawable.ic_menu_white_24dp);
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
@@ -46,10 +50,19 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         Log.d(TAG, "onOptionsItemSelected");
         switch(item.getItemId()) {
+            case R.id.icon:
+                Log.d(TAG, "tap menu icon");
+                break;
+
+            case R.id.action_search:
+                Log.d(TAG, "tap search");
+                break;
+
             case R.id.main_settings:
                 Intent intent = new Intent(this, SettingActivity.class);
                 startActivity(intent);
                 break;
+
             case R.id.main_help:
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle(R.string.help_label);
