@@ -34,6 +34,7 @@ public class MainFragment extends Fragment {
     private ImageView m_thumbnail;
     private TextView m_title_text;
     private TextView m_artist_text;
+    private TextView m_album_text;
     private ImageButton m_loop_button;    // ループボタン
     private ImageButton m_play_button;    // 再生ボタン
     private ImageButton m_shuffle_button; // シャッフルボタン
@@ -63,6 +64,7 @@ public class MainFragment extends Fragment {
         m_thumbnail.setImageResource(R.drawable.no_image);
         m_title_text = (TextView)root_view.findViewById(R.id.title);
         m_artist_text = (TextView)root_view.findViewById(R.id.artist);
+        m_album_text = (TextView)root_view.findViewById(R.id.album);
 
         // 再生ボタンのイベントを作成
         m_play_button = (ImageButton)root_view.findViewById(R.id.play_button);
@@ -190,8 +192,8 @@ public class MainFragment extends Fragment {
 
         // 曲のタイトルを設定
         m_title_text.setText(m_service.getMusicTitle());
-        m_artist_text.setText(m_service.getMusicArtist() + " - "
-                + m_service.getMusicAlbum());
+        m_artist_text.setText(m_service.getMusicArtist());
+        m_album_text.setText(m_service.getMusicAlbum());
     }
 
     /**

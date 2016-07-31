@@ -4,7 +4,8 @@
 
     <!-- 音楽ファイル用のテキスト -->
     <string name="initial_title">No title</string>
-    <string name="initial_artist">No artist - No album</string>
+    <string name="initial_artist">No artist</string>
+    <string name="initial_album">No album</string>
 
     <!-- ヘルプ用のテキスト -->
     <string name="help_label">ヘルプ</string>

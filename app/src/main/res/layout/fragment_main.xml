@@ -18,36 +18,64 @@
         android:layout_height="wrap_content"
         android:layout_weight="2">
 
-        <Button
+        <!--Button
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="Playlist"
-            android:id="@+id/bt_list" />
+            android:id="@+id/bt_list" /-->
 
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="6">
+            android:layout_weight="1"
+            android:background="#B1D6DC">
 
             <TextView
                 android:id="@+id/title"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
                 android:layout_weight="1"
+                android:paddingLeft="20sp"
+                android:paddingRight="20sp"
                 android:text="@string/initial_title"
-                android:textSize="18sp"
-                android:textColor="#000" />
+                android:textSize="22sp"
+                android:textColor="#000"
+                android:singleLine="true"
+                android:scrollHorizontally="true"
+                android:ellipsize="end" />
 
             <TextView
                 android:id="@+id/artist"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
                 android:layout_weight="1"
+                android:paddingLeft="20sp"
+                android:paddingRight="20sp"
                 android:text="@string/initial_artist"
-                android:textSize="18sp"
-                android:textColor="#000" />
+                android:textSize="15sp"
+                android:textColor="#000"
+                android:singleLine="true"
+                android:scrollHorizontally="true"
+                android:ellipsize="end"/>
+
+            <TextView
+                android:id="@+id/album"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:layout_weight="1"
+                android:paddingLeft="20sp"
+                android:paddingRight="20sp"
+                android:text="@string/initial_album"
+                android:textSize="15sp"
+                android:textColor="#000"
+                android:singleLine="true"
+                android:scrollHorizontally="true"
+                android:ellipsize="end"/>
 
         </LinearLayout>
     </LinearLayout>
