@@ -3,6 +3,14 @@
     <string name="ok_label">OK</string>
     <string name="action_search">検索</string>
 
+    <!-- エラー用のテキスト -->
+    <string name="not_found_label">ファイルが見つかりませんでした</string>
+    <string name="not_found_text">\
+        再生可能な音楽ファイルが見つかりませんでした。
+        \n\
+        設定からフォルダスキャンを実行してください。
+    </string>
+
     <!-- 音楽ファイル用のテキスト -->
     <string name="initial_title">No title</string>
     <string name="initial_artist">No artist</string>

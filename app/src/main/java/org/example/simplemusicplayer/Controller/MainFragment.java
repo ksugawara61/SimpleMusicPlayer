@@ -11,6 +11,7 @@ import android.media.MediaMetadataRetriever;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,6 +34,7 @@ public class MainFragment extends Fragment {
     private boolean m_isbound;
     private BroadcastReceiver m_receiver;
     private IntentFilter m_filter;
+    private AlertDialog m_dialog;
 
     // ビューの変化する箇所
     private ImageView m_thumbnail;
@@ -249,6 +251,16 @@ public class MainFragment extends Fragment {
             case "set_music":
                 setMusicInfo();
                 break;
+
+            // 音楽ファイルが存在しない場合
+            case "file_not_found":
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle(R.string.not_found_label);
+                builder.setMessage(R.string.not_found_text);
+                builder.setPositiveButton(R.string.ok_label, null);
+                m_dialog = builder.show();
+                break;
+
             default:
                 break;
         }

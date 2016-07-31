@@ -306,10 +306,16 @@ public class MusicService extends Service
             m_player.release();
         }
 
-        // 実行不可能な場合レコード情報を更新し、DBの情報を更新して実行可能な場合先に進む
+        // 実行不可能な場合レコード情報を更新し、実行可能な場合処理を先に進める
         if (!m_runflag) {
             getMusicRecord();
             if (!m_runflag) {
+                // 音楽ファイルがないことをブロードキャスト
+                Intent broadcast_intent = new Intent();
+                broadcast_intent.putExtra("message", "file_not_found");
+                broadcast_intent.setAction("music_action");
+                getBaseContext().sendBroadcast(broadcast_intent);
+
                 return false;
             }
         };
