@@ -1,6 +1,7 @@
 package org.example.simplemusicplayer.Controller;
 
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -314,19 +315,26 @@ public class MainFragment extends Fragment {
     private void showNotification(String title, String artist, String album) {
         Log.d(TAG, "showNotification");
 
-        NotificationCompat.Builder mBuilder =
+        Intent result_intent = new Intent(getActivity(), MainActivity.class);
+
+        PendingIntent result_pending_intent = PendingIntent.getActivity(
+                getActivity(), 0, result_intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        NotificationCompat.Builder builder =
                 (NotificationCompat.Builder) new NotificationCompat.Builder(getActivity())
                         .setSmallIcon(R.mipmap.ic_music_note_white_24dp)
                         .setContentTitle(title)
                         .setContentText(artist + " - " + album)
                         .setTicker(title + " - " + artist);
 
+        builder.setContentIntent(result_pending_intent);
+
         int mNotificationId = 001;
 
         NotificationManager mNotifyMgr =
                 (NotificationManager)getActivity().getSystemService(getActivity().NOTIFICATION_SERVICE);
 
-        mNotifyMgr.notify(mNotificationId, mBuilder.build());
+        mNotifyMgr.notify(mNotificationId, builder.build());
     }
 
 }
