@@ -14,10 +14,11 @@
         android:scaleType="fitXY" />
 
     <LinearLayout
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="2">
+        android:layout_weight="5"
+        android:background="#B1D6DC" >
 
         <!--Button
             android:layout_width="wrap_content"
@@ -29,16 +30,16 @@
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="#B1D6DC">
+            android:layout_height="wrap_content"
+            android:layout_weight="2" >
 
             <TextView
                 android:id="@+id/title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
-                android:layout_weight="1"
+                android:layout_weight="2"
+                android:paddingTop="10sp"
                 android:paddingLeft="20sp"
                 android:paddingRight="20sp"
                 android:text="@string/initial_title"
@@ -79,62 +80,77 @@
                 android:ellipsize="end"/>
 
         </LinearLayout>
-    </LinearLayout>
 
-    <SeekBar
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:progress="0"
-        android:max="100"
-        android:id="@+id/SeekBar" />
+        <SeekBar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:progress="0"
+            android:max="100"
+            android:id="@+id/SeekBar" />
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="2">
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
 
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_horizontal"
-            android:layout_weight="1"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ic_repeat_white_24dp"
-            android:id="@+id/loop_button" />
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_horizontal"
-            android:layout_weight="1"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ic_skip_previous_black_24dp"
-            android:id="@+id/prev_button" />
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_horizontal"
-            android:layout_weight="1"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ic_play_arrow_black_24dp"
-            android:id="@+id/play_button" />
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_horizontal"
-            android:layout_weight="1"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ic_skip_next_black_24dp"
-            android:id="@+id/next_button" />
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_horizontal"
-            android:layout_weight="1"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ic_shuffle_white_24dp"
-            android:id="@+id/shuffle_button" />
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="1"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_repeat_white_24dp"
+                android:id="@+id/loop_button"
+                android:background="@null"
+                android:padding="8sp" />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="1"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_skip_previous_black_24dp"
+                android:id="@+id/prev_button"
+                android:background="@null"
+                android:padding="8sp" />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="1"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_play_arrow_black_24dp"
+                android:id="@+id/play_button"
+                android:background="@null"
+                android:padding="3sp" />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="1"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_skip_next_black_24dp"
+                android:id="@+id/next_button"
+                android:background="@null"
+                android:padding="8sp" />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="1"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_shuffle_white_24dp"
+                android:id="@+id/shuffle_button"
+                android:background="@null"
+                android:padding="8sp" />
+        </LinearLayout>
+
     </LinearLayout>
 
 </LinearLayout>
