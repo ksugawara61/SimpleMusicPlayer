@@ -1,8 +1,10 @@
 package org.example.simplemusicplayer.Controller;
 
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
@@ -29,6 +31,8 @@ public class MainFragment extends Fragment {
     private final static String TAG = "MainFragment";
     private MusicService m_service;
     private boolean m_isbound;
+    private BroadcastReceiver m_receiver;
+    private IntentFilter m_filter;
 
     // ビューの変化する箇所
     private ImageView m_thumbnail;
@@ -43,6 +47,22 @@ public class MainFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate");
+
+        m_receiver = new BroadcastReceiver() {
+            /**
+             * ブロードキャストを受信するときに呼び出される
+             */
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                Log.d(TAG, "onReceive");
+                Bundle bundle = intent.getExtras();
+                receiveEvent(bundle.getString("message"));
+            }
+        };
+
+        m_filter = new IntentFilter();
+        m_filter.addAction("music_action");
+        getActivity().registerReceiver(m_receiver, m_filter);
     }
 
     /**
@@ -105,6 +125,7 @@ public class MainFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        getActivity().unregisterReceiver(m_receiver);  // レシーバの解除
         doUnbindService();  // サービスのアンバインド
         Log.d(TAG, "onDestroy");
     }
@@ -119,7 +140,6 @@ public class MainFragment extends Fragment {
                 case R.id.play_button:
                     Log.d(TAG, "push play button");
                     if (m_service.playMusic()) {
-                        setMusicInfo();
                         m_play_button.setImageResource(R.drawable.ic_pause_black_24dp);
                     }
                     else {
@@ -131,14 +151,12 @@ public class MainFragment extends Fragment {
                 case R.id.prev_button:
                     Log.d(TAG, "push prev button");
                     m_service.prevMusic();
-                    setMusicInfo();
                     break;
 
                 // 次へボタン押下時の処理
                 case R.id.next_button:
                     Log.d(TAG, "push next button");
                     m_service.nextMusic();
-                    setMusicInfo();
                     break;
 
                 // ループボタン押下時の処理
@@ -172,29 +190,6 @@ public class MainFragment extends Fragment {
             }
         }
     };
-
-    /**
-     * 音楽ファイルの情報をメイン画面に設定
-     */
-    private void setMusicInfo() {
-        // サムネイル画像を設定
-        MediaMetadataRetriever media_data = new MediaMetadataRetriever();
-        media_data.setDataSource(m_service.getMusicPath());
-        byte[] thumbnail_image =media_data.getEmbeddedPicture();
-        if (thumbnail_image != null) {
-            m_thumbnail.setImageBitmap(BitmapFactory.decodeByteArray(thumbnail_image,
-                    0, thumbnail_image.length));
-        }
-        // サムネイル画像がない場合 No Image画像を表示
-        else {
-            m_thumbnail.setImageResource(R.drawable.no_image);
-        }
-
-        // 曲のタイトルを設定
-        m_title_text.setText(m_service.getMusicTitle());
-        m_artist_text.setText(m_service.getMusicArtist());
-        m_album_text.setText(m_service.getMusicAlbum());
-    }
 
     /**
      * サービスのコネクション関連処理
@@ -240,6 +235,51 @@ public class MainFragment extends Fragment {
             getActivity().unbindService(m_connection);
             m_isbound = false;
         }
+    }
+
+    /**
+     * ブロードキャスト受信時のイベント
+     * @param message ブロードキャストメッセージ
+     */
+    private void receiveEvent(String message) {
+        Log.d(TAG, "receiveEvent: " + message);
+
+        switch(message) {
+            // 音楽情報が更新されたらレイアウトに反映
+            case "set_music":
+                setMusicInfo();
+                break;
+            default:
+                break;
+        }
+    }
+
+    /**
+     * 音楽ファイルの情報をレイアウトに反映
+     */
+    private void setMusicInfo() {
+        Log.d(TAG, "setMusicInfo");
+
+        // サムネイル画像を設定
+        MediaMetadataRetriever media_data = new MediaMetadataRetriever();
+        media_data.setDataSource(m_service.getMusicPath());
+        byte[] thumbnail_image =media_data.getEmbeddedPicture();
+        if (thumbnail_image != null) {
+            m_thumbnail.setImageBitmap(BitmapFactory.decodeByteArray(thumbnail_image,
+                    0, thumbnail_image.length));
+        }
+        // サムネイル画像がない場合 No Image画像を表示
+        else {
+            m_thumbnail.setImageResource(R.drawable.no_image);
+        }
+
+        // 曲のタイトルを設定
+        m_title_text.setText(m_service.getMusicTitle());
+        m_artist_text.setText(m_service.getMusicArtist());
+        m_album_text.setText(m_service.getMusicAlbum());
+
+        // 再生ボタンを変更
+        m_play_button.setImageResource(R.drawable.ic_pause_black_24dp);
     }
 
 }

@@ -324,6 +324,11 @@ public class MusicService extends Service
         Log.d(TAG, "set music: " + m_cursor.getString(0) + ", " + m_title
                 + ", " + m_artist + ", " + m_artist + ", " + m_path);
 
+        Intent broadcast_intent = new Intent();
+        broadcast_intent.putExtra("message", "set_music");
+        broadcast_intent.setAction("music_action");
+        getBaseContext().sendBroadcast(broadcast_intent);
+
         m_player = new MediaPlayer();
         try {
             m_player.setDataSource(m_path);
