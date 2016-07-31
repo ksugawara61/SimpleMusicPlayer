@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.util.Random;
 
 import static org.example.simplemusicplayer.Model.DBConstant.*;
+import static org.example.simplemusicplayer.Model.MusicConstant.*;
 
 /**
  * Created by katsuya on 16/07/24.
@@ -312,8 +313,8 @@ public class MusicService extends Service
             if (!m_runflag) {
                 // 音楽ファイルがないことをブロードキャスト
                 Intent broadcast_intent = new Intent();
-                broadcast_intent.putExtra("message", "file_not_found");
-                broadcast_intent.setAction("music_action");
+                broadcast_intent.putExtra(MUSIC_MESSAGE, MUSIC_EVENT_NOTFOUND);
+                broadcast_intent.setAction(MUSIC_ACTION);
                 getBaseContext().sendBroadcast(broadcast_intent);
 
                 return false;
@@ -331,8 +332,8 @@ public class MusicService extends Service
                 + ", " + m_artist + ", " + m_artist + ", " + m_path);
 
         Intent broadcast_intent = new Intent();
-        broadcast_intent.putExtra("message", "set_music");
-        broadcast_intent.setAction("music_action");
+        broadcast_intent.putExtra(MUSIC_MESSAGE, MUSIC_EVENT_SET);
+        broadcast_intent.setAction(MUSIC_ACTION);
         getBaseContext().sendBroadcast(broadcast_intent);
 
         m_player = new MediaPlayer();

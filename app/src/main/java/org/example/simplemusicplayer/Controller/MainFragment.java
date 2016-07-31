@@ -24,6 +24,8 @@ import android.widget.Toast;
 import org.example.simplemusicplayer.Model.MusicService;
 import org.example.simplemusicplayer.R;
 
+import static org.example.simplemusicplayer.Model.MusicConstant.*;
+
 /**
  * Created by katsuya on 16/07/21.
  */
@@ -58,7 +60,7 @@ public class MainFragment extends Fragment {
             public void onReceive(Context context, Intent intent) {
                 Log.d(TAG, "onReceive");
                 Bundle bundle = intent.getExtras();
-                receiveEvent(bundle.getString("message"));
+                receiveEvent(bundle.getString(MUSIC_MESSAGE));
             }
         };
 
@@ -248,12 +250,12 @@ public class MainFragment extends Fragment {
 
         switch(message) {
             // 音楽情報が更新されたらレイアウトに反映
-            case "set_music":
+            case MUSIC_EVENT_SET:
                 setMusicInfo();
                 break;
 
             // 音楽ファイルが存在しない場合
-            case "file_not_found":
+            case MUSIC_EVENT_NOTFOUND:
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setTitle(R.string.not_found_label);
                 builder.setMessage(R.string.not_found_text);
