@@ -329,6 +329,11 @@ public class MainFragment extends Fragment {
 
         builder.setContentIntent(result_pending_intent);
 
+        // アクションボタンを追加
+        builder.addAction(R.drawable.ic_skip_previous_black_24dp, "前の曲", null);
+        builder.addAction(R.drawable.ic_pause_black_24dp, "停止", null);
+        builder.addAction(R.drawable.ic_skip_next_black_24dp, "次の曲", null);
+
         int mNotificationId = 001;
 
         NotificationManager mNotifyMgr =
