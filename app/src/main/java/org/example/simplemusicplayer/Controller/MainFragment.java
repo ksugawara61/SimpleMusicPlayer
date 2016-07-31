@@ -1,5 +1,6 @@
 package org.example.simplemusicplayer.Controller;
 
+import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -12,6 +13,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -251,7 +253,11 @@ public class MainFragment extends Fragment {
         switch(message) {
             // 音楽情報が更新されたらレイアウトに反映
             case MUSIC_EVENT_SET:
-                setMusicInfo();
+                String title = m_service.getMusicTitle();
+                String artist = m_service.getMusicArtist();
+                String album = m_service.getMusicAlbum();
+                setMusicInfo(title, artist, album);
+                showNotification(title, artist, album);
                 break;
 
             // 音楽ファイルが存在しない場合
@@ -270,8 +276,11 @@ public class MainFragment extends Fragment {
 
     /**
      * 音楽ファイルの情報をレイアウトに反映
+     * @param title  音楽タイトル
+     * @param artist アーティスト名
+     * @param album  アルバム名
      */
-    private void setMusicInfo() {
+    private void setMusicInfo(String title, String artist, String album) {
         Log.d(TAG, "setMusicInfo");
 
         // サムネイル画像を設定
@@ -294,6 +303,30 @@ public class MainFragment extends Fragment {
 
         // 再生ボタンを変更
         m_play_button.setImageResource(R.drawable.ic_pause_black_24dp);
+    }
+
+    /**
+     * ノティフィケーションを表示
+     * @param title  音楽タイトル
+     * @param artist アーティスト名
+     * @param album  アルバム名
+     */
+    private void showNotification(String title, String artist, String album) {
+        Log.d(TAG, "showNotification");
+
+        NotificationCompat.Builder mBuilder =
+                (NotificationCompat.Builder) new NotificationCompat.Builder(getActivity())
+                        .setSmallIcon(R.mipmap.ic_music_note_white_24dp)
+                        .setContentTitle(title)
+                        .setContentText(artist + " - " + album)
+                        .setTicker(title + " - " + artist);
+
+        int mNotificationId = 001;
+
+        NotificationManager mNotifyMgr =
+                (NotificationManager)getActivity().getSystemService(getActivity().NOTIFICATION_SERVICE);
+
+        mNotifyMgr.notify(mNotificationId, mBuilder.build());
     }
 
 }
