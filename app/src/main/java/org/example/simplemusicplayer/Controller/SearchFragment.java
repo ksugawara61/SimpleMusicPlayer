@@ -1,8 +1,10 @@
 package org.example.simplemusicplayer.Controller;
 
+import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
@@ -11,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
@@ -85,7 +88,16 @@ public class SearchFragment extends Fragment {
                 HashMap<String, String> item = (HashMap<String, String>)listView.getItemAtPosition(position);
                 Log.d(TAG, item.get("title"));
 
+                // リストビューのクリックを検知したらキーボードを閉じる
+                InputMethodManager input = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                input.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+
                 // 音楽のタイトルを渡して、MainFragmentへ遷移する
+                MainFragment fragment = new MainFragment();
+                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                transaction.add(android.R.id.content, fragment);
+//                transaction.addToBackStack(null);
+                transaction.commit();
             }
         });
 
