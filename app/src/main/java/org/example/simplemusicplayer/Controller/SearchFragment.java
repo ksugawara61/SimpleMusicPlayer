@@ -1,5 +1,6 @@
 package org.example.simplemusicplayer.Controller;
 
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
@@ -14,7 +15,12 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 
+import org.example.simplemusicplayer.Model.MusicDBAdapter;
 import org.example.simplemusicplayer.R;
+
+import static org.example.simplemusicplayer.Model.DBConstant.DB_NAME;
+import static org.example.simplemusicplayer.Model.DBConstant.SEARCH_MUSIC_TITLE;
+import static org.example.simplemusicplayer.Model.DBConstant.SELECT_ALL_MUSIC;
 
 /**
  * Created by katsuya on 16/08/03.
@@ -25,6 +31,7 @@ public class SearchFragment extends Fragment {
     private final static String TAG = SearchFragment.class.getSimpleName();
     private ListView m_search_results;
     private SearchView m_search;
+    private MusicDBAdapter m_adapter = null;  // 音楽DB
 
     /**
      * フラグメントの生成
@@ -35,6 +42,7 @@ public class SearchFragment extends Fragment {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate");
         setHasOptionsMenu(true);
+        m_adapter = new MusicDBAdapter(getContext(), DB_NAME, null, 1);
     }
 
     /**
@@ -115,9 +123,18 @@ public class SearchFragment extends Fragment {
             m_search_results.setAdapter(adapter);
 
             // 検索結果をリストビューに表示
-            adapter.add("a");
-            adapter.add("b");
-            m_search_results.setAdapter(adapter);
+            if (search_word != null && search_word.length() != 0) {
+                // DBから検索文字にマッチするレコードを取得
+                Cursor cursor = m_adapter.rawQueryMusic(SEARCH_MUSIC_TITLE,
+                        new String[]{search_word});
+                // リストビューに表示するレコード情報をadapterに追加
+                int cnt = cursor.getCount();
+                for (int i = 0; i < cnt; i++) {
+                    cursor.moveToPosition(i);
+                    adapter.add(cursor.getString(0));
+                }
+                m_search_results.setAdapter(adapter);
+            }
             return true;
         }
     };
