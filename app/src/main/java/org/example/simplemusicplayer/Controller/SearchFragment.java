@@ -14,9 +14,15 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
 
 import org.example.simplemusicplayer.Model.MusicDBAdapter;
 import org.example.simplemusicplayer.R;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static org.example.simplemusicplayer.Model.DBConstant.DB_NAME;
 import static org.example.simplemusicplayer.Model.DBConstant.SEARCH_MUSIC_TITLE;
@@ -117,25 +123,44 @@ public class SearchFragment extends Fragment {
         public boolean onQueryTextChange(String search_word) {
             Log.d(TAG, "onQueryTextChange: " + search_word);
 
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
-                    android.R.layout.simple_list_item_1);
             // 検索文字が入力される度にリストビューを初期化
-            m_search_results.setAdapter(adapter);
+            m_search_results.setAdapter(new ArrayAdapter<String>(getActivity(),
+                    android.R.layout.simple_list_item_1));
 
             // 検索結果をリストビューに表示
             if (search_word != null && search_word.length() != 0) {
-                // DBから検索文字にマッチするレコードを取得
-                Cursor cursor = m_adapter.rawQueryMusic(SEARCH_MUSIC_TITLE,
-                        new String[]{search_word});
-                // リストビューに表示するレコード情報をadapterに追加
-                int cnt = cursor.getCount();
-                for (int i = 0; i < cnt; i++) {
-                    cursor.moveToPosition(i);
-                    adapter.add(cursor.getString(0));
-                }
-                m_search_results.setAdapter(adapter);
+                m_search_results.setAdapter(getSearchResults(search_word));
             }
             return true;
+        }
+
+        /**
+         * 検索文字に対応する検索結果を取得
+         * @param search_word 検索文字
+         * @return リストビューに表示する検索結果
+         */
+        private SimpleAdapter getSearchResults(String search_word) {
+            // DBから検索文字にマッチするレコードを取得
+            Cursor cursor = m_adapter.rawQueryMusic(SEARCH_MUSIC_TITLE,
+                    new String[]{search_word});
+
+            // リストビューに表示するレコード情報をadapterに追加
+            int cnt = cursor.getCount();
+            List<Map<String, String>> results_list = new ArrayList<Map<String, String>>();
+            for (int i = 0; i < cnt; i++) {
+                cursor.moveToPosition(i);
+                Map<String, String> tmp = new HashMap<String, String>();
+                tmp.put("title", cursor.getString(0));
+                tmp.put("other", cursor.getString(1) + " - " + cursor.getString(2));
+                results_list.add(tmp);
+            }
+
+            SimpleAdapter adapter = new SimpleAdapter(getActivity(), results_list,
+                    android.R.layout.simple_list_item_2,
+                    new String[] {"title", "other"},
+                    new int[] {android.R.id.text1, android.R.id.text2});
+
+            return adapter;
         }
     };
 

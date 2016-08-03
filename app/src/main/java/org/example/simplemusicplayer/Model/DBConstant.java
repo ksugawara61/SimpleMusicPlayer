@@ -128,6 +128,11 @@ public final class DBConstant {
             + " = " + TABLE_ALBUM + "." + COLUMN_ALBUM_ID;
 
     // 検索クエリに対応する音楽リスト取得用SQL
-    public static final String SEARCH_MUSIC_TITLE = "select " + COLUMN_MUSIC_TITLE + " from "
-            + TABLE_MUSIC + " where " + COLUMN_MUSIC_TITLE + " like '%' || ? || '%' escape '$'";//" = ?";
+    public static final String SEARCH_MUSIC_TITLE = "select " + COLUMN_MUSIC_TITLE + ", "
+            + COLUMN_ARTIST_NAME + ", " + COLUMN_ALBUM_NAME + " from " + TABLE_MUSIC
+            + " inner join " + TABLE_ARTIST + " on " + TABLE_MUSIC + "." + COLUMN_ARTIST_ID
+            + " = " + TABLE_ARTIST + "." + COLUMN_ARTIST_ID + " "
+            + " inner join " + TABLE_ALBUM + " on " + TABLE_MUSIC + "." + COLUMN_ALBUM_ID
+            + " = " + TABLE_ALBUM + "." + COLUMN_ALBUM_ID
+            + " where " + COLUMN_MUSIC_TITLE + " like '%' || ? || '%' escape '$'";//" = ?";
 }
