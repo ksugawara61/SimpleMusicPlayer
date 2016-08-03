@@ -20,7 +20,6 @@ import org.example.simplemusicplayer.R;
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
-    private AlertDialog m_dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,11 +41,6 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setIcon(R.drawable.ic_menu_white_24dp);
         getMenuInflater().inflate(R.menu.menu_main, menu);
-
-        // 検索バーのイベントを設定
-//        m_search = (MusicSearchView)MenuItemCompat.getActionView(
-//                menu.findItem(R.id.action_search));
-//        m_search.setOnQueryTextListener(onQueryTextListener);
 
         return true;
     }
@@ -85,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
                 builder.setMessage(R.string.help_text);
                 builder.setCancelable(false);
                 builder.setPositiveButton(R.string.ok_label, null);
-                m_dialog = builder.show();
+                builder.show();
                 break;
             default:
                 Log.d(TAG, "default");
