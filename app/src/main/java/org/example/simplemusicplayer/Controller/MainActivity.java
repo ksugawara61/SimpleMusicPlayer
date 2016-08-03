@@ -43,11 +43,10 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setIcon(R.drawable.ic_menu_white_24dp);
         getMenuInflater().inflate(R.menu.menu_main, menu);
 
-        // 検索のイベント
-        SearchView search = (SearchView) MenuItemCompat.getActionView(
-                menu.findItem(R.id.action_search));
-        search.setOnQueryTextListener(onQueryTextListener);
-
+        // 検索バーのイベントを設定
+//        m_search = (MusicSearchView)MenuItemCompat.getActionView(
+//                menu.findItem(R.id.action_search));
+//        m_search.setOnQueryTextListener(onQueryTextListener);
 
         return true;
     }
@@ -67,7 +66,8 @@ public class MainActivity extends AppCompatActivity {
 
             case R.id.action_search:
                 Log.d(TAG, "tap search");
-                MainFragment fragment = new MainFragment();
+
+                SearchFragment fragment = new SearchFragment();
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                 transaction.add(android.R.id.content, fragment);
                 transaction.addToBackStack(null);
@@ -88,25 +88,10 @@ public class MainActivity extends AppCompatActivity {
                 m_dialog = builder.show();
                 break;
             default:
-                Log.d(TAG, "test");
+                Log.d(TAG, "default");
                 break;
         }
         return true;
     }
 
-    private SearchView.OnQueryTextListener onQueryTextListener = new SearchView.OnQueryTextListener() {
-        @Override
-        public boolean onQueryTextSubmit(String searchWord) {
-            // SubmitボタンorEnterKeyを押されたら呼び出されるメソッド
-            Log.d(TAG, searchWord);
-            return true;
-        }
-
-        @Override
-        public boolean onQueryTextChange(String newText) {
-            // 入力される度に呼び出される
-            Log.d(TAG, newText);
-            return false;
-        }
-    };
 }
