@@ -11,10 +11,12 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.Toast;
 
 import org.example.simplemusicplayer.Model.MusicDBAdapter;
 import org.example.simplemusicplayer.R;
@@ -68,6 +70,24 @@ public class SearchFragment extends Fragment {
 
         // メンバ変数に格納
         m_search_results = (ListView)root_view.findViewById(R.id.search_results);
+        m_search_results.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            /**
+             * リストビューのクリックイベント
+             * @param parent
+             * @param view
+             * @param position
+             * @param id
+             */
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // 選択したアイテムの取得
+                ListView listView = (ListView)parent;
+                HashMap<String, String> item = (HashMap<String, String>)listView.getItemAtPosition(position);
+                Log.d(TAG, item.get("title"));
+
+                // 音楽のタイトルを渡して、MainFragmentへ遷移する
+            }
+        });
 
         return root_view;
     }
