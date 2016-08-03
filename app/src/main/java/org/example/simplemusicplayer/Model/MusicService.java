@@ -277,7 +277,9 @@ public class MusicService extends Service
      */
     private void shuffleMusic() {
         Log.i(TAG, "shuffleMusic");
-        m_cursor.moveToPosition(m_rand.nextInt(m_musiclen));
+        if (m_musiclen != 0) {
+            m_cursor.moveToPosition(m_rand.nextInt(m_musiclen));
+        }
         createMusic();
     }
 
