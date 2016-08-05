@@ -99,6 +99,7 @@ public class SearchFragment extends Fragment {
                 input.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 
                 // 音楽のタイトルを渡して、MainFragmentへ遷移する
+                getFragmentManager().popBackStack();
  //               MainFragment fragment = new MainFragment();
 //                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
 //                transaction.add(android.R.id.content, fragment);
@@ -147,6 +148,7 @@ public class SearchFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         Log.d(TAG, "onDestroy");
+        m_search_results = null;
     }
 
     /**
@@ -162,7 +164,7 @@ public class SearchFragment extends Fragment {
         @Override
         public boolean onQueryTextSubmit(String search_word) {
             Log.d(TAG, "onQueryTextSubmit: " + search_word);
-            return true;
+            return false;
         }
 
         /**
@@ -174,6 +176,11 @@ public class SearchFragment extends Fragment {
         public boolean onQueryTextChange(String search_word) {
             Log.d(TAG, "onQueryTextChange: " + search_word);
 
+            if (m_search_results == null) {
+                Log.d(TAG, "m_search_results is null");
+                return false;
+            }
+
             // 検索文字が入力される度にリストビューを初期化
             m_search_results.setAdapter(new ArrayAdapter<String>(getActivity(),
                     android.R.layout.simple_list_item_1));
@@ -182,7 +189,7 @@ public class SearchFragment extends Fragment {
             if (search_word != null && search_word.length() != 0) {
                 m_search_results.setAdapter(getSearchResults(search_word));
             }
-            return true;
+            return false;
         }
 
         /**
