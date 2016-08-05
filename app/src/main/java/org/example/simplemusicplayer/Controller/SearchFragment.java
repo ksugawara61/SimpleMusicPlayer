@@ -14,6 +14,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -45,6 +46,7 @@ public class SearchFragment extends Fragment {
 
     private final static String TAG = SearchFragment.class.getSimpleName();
     private ListView m_search_results;
+    private MenuItem m_menu_item;
     private SearchView m_search;
     private MusicDBAdapter m_adapter = null;  // 音楽DB
 
@@ -91,6 +93,7 @@ public class SearchFragment extends Fragment {
              */
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
                 // 選択したアイテムの取得
                 ListView listView = (ListView)parent;
                 HashMap<String, String> item = (HashMap<String, String>)listView.getItemAtPosition(position);
@@ -117,8 +120,10 @@ public class SearchFragment extends Fragment {
 
                 // MainFragmentへ遷移する
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                transaction.add(android.R.id.content, fragment);
+                transaction.replace(android.R.id.content, fragment);
                 transaction.commit();
+
+                getFragmentManager().popBackStack();
             }
         });
 
@@ -165,7 +170,7 @@ public class SearchFragment extends Fragment {
         @Override
         public boolean onQueryTextSubmit(String search_word) {
             Log.d(TAG, "onQueryTextSubmit: " + search_word);
-            return false;
+            return true;
         }
 
         /**
@@ -190,7 +195,7 @@ public class SearchFragment extends Fragment {
             if (search_word != null && search_word.length() != 0) {
                 m_search_results.setAdapter(getSearchResults(search_word));
             }
-            return false;
+            return true;
         }
 
         /**

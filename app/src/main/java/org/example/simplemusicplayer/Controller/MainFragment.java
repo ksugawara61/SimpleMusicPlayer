@@ -14,8 +14,10 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.NotificationCompat;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -148,11 +150,12 @@ public class MainFragment extends Fragment {
      * @param menu
      * @return
      */
-    @Override
+/*    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
         super.onCreateOptionsMenu(menu, menuInflater);
         Log.d(TAG, "onCreateOptionsMenu");
-    }
+        MenuItemCompat.getActionView(menu.findItem(R.id.action_search)).clearFocus();
+    }*/
 
     /**
      * サービスの開始
