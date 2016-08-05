@@ -1,13 +1,16 @@
 package org.example.simplemusicplayer.Controller;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -31,7 +34,6 @@ import java.util.Map;
 
 import static org.example.simplemusicplayer.Model.DBConstant.DB_NAME;
 import static org.example.simplemusicplayer.Model.DBConstant.SEARCH_MUSIC_TITLE;
-import static org.example.simplemusicplayer.Model.DBConstant.SELECT_ALL_MUSIC;
 
 /**
  * Created by katsuya on 16/08/03.
@@ -71,6 +73,10 @@ public class SearchFragment extends Fragment {
         View root_view = inflater.inflate(R.layout.fragment_search, container, false);
         getActivity().getMenuInflater();
 
+        // キーのタップイベント
+        root_view.setFocusableInTouchMode(true);
+        root_view.setOnKeyListener(onKeyListener);
+
         // メンバ変数に格納
         m_search_results = (ListView)root_view.findViewById(R.id.search_results);
         m_search_results.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -86,18 +92,31 @@ public class SearchFragment extends Fragment {
                 // 選択したアイテムの取得
                 ListView listView = (ListView)parent;
                 HashMap<String, String> item = (HashMap<String, String>)listView.getItemAtPosition(position);
-                Log.d(TAG, item.get("title"));
+                Log.d(TAG, "onItemClick: " + item.get("title"));
 
                 // リストビューのクリックを検知したらキーボードを閉じる
                 InputMethodManager input = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 input.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 
                 // 音楽のタイトルを渡して、MainFragmentへ遷移する
-                MainFragment fragment = new MainFragment();
-                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                transaction.add(android.R.id.content, fragment);
+ //               MainFragment fragment = new MainFragment();
+//                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+//                transaction.add(android.R.id.content, fragment);
 //                transaction.addToBackStack(null);
-                transaction.commit();
+//                transaction.commit();
+//                FragmentManager manager = getFragmentManager();
+//                FragmentManager.BackStackEntry entry = manager.getBackStackEntryAt(0);
+///                manager.popBackStack(entry.getId(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+//                getFragmentManager().popBackStack();
+//                Log.d(TAG, "hoge");
+//                Intent intent = new Intent(getActivity(), MainActivity.class);
+//                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+//                startActivity(intent);;
+//                getFragmentManager().beginTransaction().remove(itself).commit();
+//                getActivity().getSupportFragmentManager().popBackStack();
+//                getFragmentManager().popBackStack();
+//                Log.d(TAG, "clash");
             }
         });
 
@@ -196,4 +215,32 @@ public class SearchFragment extends Fragment {
         }
     };
 
+    /**
+     * キーの入力イベント
+     */
+    private View.OnKeyListener onKeyListener = new View.OnKeyListener() {
+
+        /**
+         * キーのタップイベント
+         * @param view
+         * @param key_code
+         * @param event
+         * @return
+         */
+        @Override
+        public boolean onKey(View view, int key_code, KeyEvent event) {
+            switch (key_code) {
+                // バックキーがタップされた時のイベント
+                case (KeyEvent.KEYCODE_BACK):
+                    Log.d(TAG, "tap back key");
+                    getFragmentManager().popBackStack();
+                    return true;
+
+                default:
+                    break;
+            }
+
+            return false;
+        }
+    };
 }

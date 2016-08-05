@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
      * @param item
      * @return
      */
-    @Override
+    /*@Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Log.d(TAG, "onOptionsItemSelected");
         switch(item.getItemId()) {
@@ -86,6 +86,6 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
         return true;
-    }
+    }*/
 
 }

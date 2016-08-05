@@ -18,6 +18,8 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,7 +38,7 @@ import static org.example.simplemusicplayer.Model.MusicConstant.*;
  */
 public class MainFragment extends Fragment {
 
-    private final static String TAG = "MainFragment";
+    private final static String TAG = MainFragment.class.getSimpleName();
     private MusicService m_service;
     private boolean m_isbound;
     private BroadcastReceiver m_receiver;
@@ -56,6 +58,7 @@ public class MainFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate");
+        setHasOptionsMenu(true);
 
         m_receiver = new BroadcastReceiver() {
             /**
@@ -119,6 +122,17 @@ public class MainFragment extends Fragment {
     }
 
     /**
+     * メニューアイコンをセット
+     * @param menu
+     * @return
+     */
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
+        super.onCreateOptionsMenu(menu, menuInflater);
+        Log.d(TAG, "onCreateOptionsMenu");
+    }
+
+    /**
      * サービスの開始
      */
     @Override
@@ -137,6 +151,50 @@ public class MainFragment extends Fragment {
         getActivity().unregisterReceiver(m_receiver);  // レシーバの解除
         doUnbindService();  // サービスのアンバインド
         Log.d(TAG, "onDestroy");
+    }
+
+    /**
+     * メニューの項目がタップされた時の動作
+     * @param item
+     * @return
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Log.d(TAG, "onOptionsItemSelected");
+        switch(item.getItemId()) {
+            case android.R.id.home:
+                Log.d(TAG, "tap menu icon");
+                break;
+
+            case R.id.action_search:
+                Log.d(TAG, "tap search");
+
+                SearchFragment fragment = new SearchFragment();
+                FragmentTransaction transaction =
+                        getActivity().getSupportFragmentManager().beginTransaction();
+                transaction.add(android.R.id.content, fragment);
+                transaction.addToBackStack(null);
+                transaction.commit();
+                break;
+
+            case R.id.main_settings:
+                Intent intent = new Intent(getActivity(), SettingActivity.class);
+                startActivity(intent);
+                break;
+
+            case R.id.main_help:
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle(R.string.help_label);
+                builder.setMessage(R.string.help_text);
+                builder.setCancelable(false);
+                builder.setPositiveButton(R.string.ok_label, null);
+                builder.show();
+                break;
+            default:
+                Log.d(TAG, "default");
+                break;
+        }
+        return true;
     }
 
     /**
