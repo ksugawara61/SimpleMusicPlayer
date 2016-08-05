@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -45,8 +46,8 @@ import static org.example.simplemusicplayer.Model.DBConstant.SEARCH_MUSIC_TITLE;
 public class SearchFragment extends Fragment {
 
     private final static String TAG = SearchFragment.class.getSimpleName();
+    private SearchFragment m_search_fragment;
     private ListView m_search_results;
-    private MenuItem m_menu_item;
     private SearchView m_search;
     private MusicDBAdapter m_adapter = null;  // 音楽DB
 
@@ -60,6 +61,7 @@ public class SearchFragment extends Fragment {
         Log.d(TAG, "onCreate");
         setHasOptionsMenu(true);
         m_adapter = new MusicDBAdapter(getContext(), DB_NAME, null, 1);
+        m_search_fragment = this;
     }
 
     /**
@@ -121,9 +123,8 @@ public class SearchFragment extends Fragment {
                 // MainFragmentへ遷移する
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
                 transaction.replace(android.R.id.content, fragment);
+                transaction.remove(m_search_fragment);
                 transaction.commit();
-
-                getFragmentManager().popBackStack();
             }
         });
 
@@ -142,6 +143,8 @@ public class SearchFragment extends Fragment {
         Log.d(TAG, "onCreateOptionsMenu");
 
         // 検索バーのイベントを設定
+        MenuItemCompat.setOnActionExpandListener(menu.findItem(R.id.action_search),
+                onActionExpandListener);
         SearchView m_search = (SearchView)MenuItemCompat.getActionView(
                 menu.findItem(R.id.action_search));
         m_search.setOnQueryTextListener(onQueryTextListener);
@@ -160,6 +163,33 @@ public class SearchFragment extends Fragment {
     /**
      * 検索バーのイベント
      */
+    private MenuItemCompat.OnActionExpandListener onActionExpandListener =
+            new MenuItemCompat.OnActionExpandListener()
+    {
+        /**
+         * 検索バーを閉じるボタンを押した時の動作
+         * @param item
+         * @return
+         */
+        @Override
+        public boolean onMenuItemActionCollapse(MenuItem item) {
+            Log.d(TAG, "search view collapse");
+            getFragmentManager().popBackStack();  // MainFragmentへ戻る
+            return true;
+        }
+
+        /**
+         *
+         * @param item
+         * @return
+         */
+        @Override
+        public boolean onMenuItemActionExpand(MenuItem item) {
+            Log.d(TAG, "search view expand");
+            return true;
+        }
+    };
+
     private SearchView.OnQueryTextListener onQueryTextListener = new SearchView.OnQueryTextListener() {
 
         /**
