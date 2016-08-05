@@ -72,8 +72,12 @@ public class MainFragment extends Fragment {
         // 他フラグメントからのデータがある場合、取得処理
         Bundle bundle = getArguments();
         if (bundle != null) {
-            Log.d(TAG, "get title: " + bundle.getString("title"));
+            Log.d(TAG, "bundle: " + bundle.getString("title") + " "
+                    + bundle.getString("artist") + " "
+                    + bundle.getString("album"));
             m_init_title = bundle.getString("title");
+            m_init_artist = bundle.getString("artist");
+            m_init_album = bundle.getString("album");
         }
 
         m_receiver = new BroadcastReceiver() {
@@ -289,9 +293,8 @@ public class MainFragment extends Fragment {
             m_service = ((MusicService.MusicBinder)service).getService();
 
             // タイトルが設定されていたら音楽を流す
-            if (m_init_title != null) {
-                Log.d(TAG, "onServiceConnected: " + m_init_title );
-                m_service.playSpecifiedMusic(m_init_title);
+            if (m_init_title != null && m_init_artist != null && m_init_album != null) {
+                m_service.playSpecifiedMusic(m_init_title, m_init_artist, m_init_album);
             }
         }
 

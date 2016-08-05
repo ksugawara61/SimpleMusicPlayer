@@ -160,15 +160,19 @@ public class MusicService extends Service
 
     /**
      * 指定した音楽を再生する
-     * @param title 再生する音楽名
+     * @param title  再生する音楽名
+     * @param artist 再生する音楽のアーティスト名
+     * @param album  再生する音楽のアルバム名
      */
-    public void playSpecifiedMusic(String title) {
+    public void playSpecifiedMusic(String title, String artist, String album) {
         Log.d(TAG, "playSpecifiedMusic");
 
         // 音楽名が一致する場所まで Cursorを移動する
         for (int i = 0; i < m_musiclen; i++) {
             m_cursor.moveToPosition(i);
-            if (title.equals(m_cursor.getString(1))) {
+            if (title.equals(m_cursor.getString(1)) && artist.equals(m_cursor.getString(2))
+                    && album.equals(m_cursor.getString(3)))
+            {
                 createMusic();
                 break;
             }

@@ -31,6 +31,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static org.example.simplemusicplayer.Model.DBConstant.DB_NAME;
 import static org.example.simplemusicplayer.Model.DBConstant.SEARCH_MUSIC_TITLE;
@@ -92,7 +94,7 @@ public class SearchFragment extends Fragment {
                 // 選択したアイテムの取得
                 ListView listView = (ListView)parent;
                 HashMap<String, String> item = (HashMap<String, String>)listView.getItemAtPosition(position);
-                Log.d(TAG, "onItemClick: " + item.get("title"));
+                Log.d(TAG, "onItemClick title: " + item.get("title"));
 
                 // リストビューのクリックを検知したらキーボードを閉じる
                 InputMethodManager input = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -102,6 +104,15 @@ public class SearchFragment extends Fragment {
                 MainFragment fragment = new MainFragment();
                 Bundle bundle = new Bundle();
                 bundle.putString("title", item.get("title"));
+
+                Matcher matcher = Pattern.compile("(.*) - (.*)").matcher(item.get("other"));
+                if (matcher.find()) {
+                    Log.d(TAG, "onItemClick artist: " + matcher.group(1));
+                    Log.d(TAG, "onItemClick album: " + matcher.group(2));
+                    bundle.putString("artist", matcher.group(1));
+                    bundle.putString("album", matcher.group(2));
+                }
+
                 fragment.setArguments(bundle);
 
                 // MainFragmentへ遷移する
