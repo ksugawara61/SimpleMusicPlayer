@@ -139,7 +139,10 @@ public class MusicDBAdapter {
 
             // 既にDBに登録されているレコードか確認し、登録されていない場合新規追加
             int update_num = db.update(TABLE_MUSIC, values,
-                    COLUMN_MUSIC_TITLE + " = ?", new String[]{title});
+                    COLUMN_MUSIC_TITLE + " = ? and " +
+                    COLUMN_ARTIST_ID + " = ? and " +
+                    COLUMN_ALBUM_ID + " = ?",
+                    new String[]{title, artist_id, album_id});
             if (update_num == 0) {
                 db.insert(TABLE_MUSIC, "", values);
             }
