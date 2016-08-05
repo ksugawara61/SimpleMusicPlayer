@@ -98,26 +98,16 @@ public class SearchFragment extends Fragment {
                 InputMethodManager input = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 input.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 
-                // 音楽のタイトルを渡して、MainFragmentへ遷移する
-                getFragmentManager().popBackStack();
- //               MainFragment fragment = new MainFragment();
-//                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-//                transaction.add(android.R.id.content, fragment);
-//                transaction.addToBackStack(null);
-//                transaction.commit();
-//                FragmentManager manager = getFragmentManager();
-//                FragmentManager.BackStackEntry entry = manager.getBackStackEntryAt(0);
-///                manager.popBackStack(entry.getId(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
-//                getFragmentManager().popBackStack();
-//                Log.d(TAG, "hoge");
-//                Intent intent = new Intent(getActivity(), MainActivity.class);
-//                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//                intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-//                startActivity(intent);;
-//                getFragmentManager().beginTransaction().remove(itself).commit();
-//                getActivity().getSupportFragmentManager().popBackStack();
-//                getFragmentManager().popBackStack();
-//                Log.d(TAG, "clash");
+                // 音楽情報をMainFragmentに設定
+                MainFragment fragment = new MainFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString("title", item.get("title"));
+                fragment.setArguments(bundle);
+
+                // MainFragmentへ遷移する
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                transaction.add(android.R.id.content, fragment);
+                transaction.commit();
             }
         });
 

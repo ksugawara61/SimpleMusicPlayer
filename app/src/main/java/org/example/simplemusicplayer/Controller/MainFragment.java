@@ -45,6 +45,11 @@ public class MainFragment extends Fragment {
     private IntentFilter m_filter;
     private AlertDialog m_dialog;
 
+    // 初期値として表示する項目
+    private String m_init_title = null;
+    private String m_init_artist = null;
+    private String m_init_album = null;
+
     // ビューの変化する箇所
     private ImageView m_thumbnail;
     private TextView m_title_text;
@@ -54,11 +59,22 @@ public class MainFragment extends Fragment {
     private ImageButton m_play_button;    // 再生ボタン
     private ImageButton m_shuffle_button; // シャッフルボタン
 
+    /**
+     * フラグメントの生成
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate");
         setHasOptionsMenu(true);
+
+        // 他フラグメントからのデータがある場合、取得処理
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            Log.d(TAG, "get title: " + bundle.getString("title"));
+            m_init_title = bundle.getString("title");
+        }
 
         m_receiver = new BroadcastReceiver() {
             /**
@@ -75,6 +91,8 @@ public class MainFragment extends Fragment {
         m_filter = new IntentFilter();
         m_filter.addAction("music_action");
         getActivity().registerReceiver(m_receiver, m_filter);
+
+        doBindService();  // サービスをバインド
     }
 
     /**
@@ -139,7 +157,6 @@ public class MainFragment extends Fragment {
     public void onResume() {
         super.onResume();
         Log.d(TAG, "onResume");
-        doBindService();  // サービスをバインド
     }
 
     /**
@@ -270,6 +287,12 @@ public class MainFragment extends Fragment {
         public void onServiceConnected(ComponentName class_name, IBinder service) {
             Log.d(TAG, "onServiceConnected");
             m_service = ((MusicService.MusicBinder)service).getService();
+
+            // タイトルが設定されていたら音楽を流す
+            if (m_init_title != null) {
+                Log.d(TAG, "onServiceConnected: " + m_init_title );
+                m_service.playSpecifiedMusic(m_init_title);
+            }
         }
 
         /**

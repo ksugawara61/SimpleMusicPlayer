@@ -34,7 +34,7 @@ public class MusicService extends Service
         }
     }
 
-    private static final String TAG = "MusicMediaPlayer";
+    private static final String TAG = MusicService.class.getSimpleName();
     private final IBinder m_binder = new MusicBinder();  // Binderの生成
     private MediaPlayer m_player = null;  // 音楽プレーヤー
     private MusicDBAdapter m_adapter = null;
@@ -156,6 +156,23 @@ public class MusicService extends Service
      */
     public String getMusicPath() {
         return m_path;
+    }
+
+    /**
+     * 指定した音楽を再生する
+     * @param title 再生する音楽名
+     */
+    public void playSpecifiedMusic(String title) {
+        Log.d(TAG, "playSpecifiedMusic");
+
+        // 音楽名が一致する場所まで Cursorを移動する
+        for (int i = 0; i < m_musiclen; i++) {
+            m_cursor.moveToPosition(i);
+            if (title.equals(m_cursor.getString(1))) {
+                createMusic();
+                break;
+            }
+        }
     }
 
     /**
