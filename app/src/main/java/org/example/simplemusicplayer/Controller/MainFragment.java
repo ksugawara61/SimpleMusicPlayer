@@ -1,5 +1,6 @@
 package org.example.simplemusicplayer.Controller;
 
+import android.app.ActivityManager;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -12,6 +13,7 @@ import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.v4.app.ActivityManagerCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.MenuItemCompat;
@@ -33,6 +35,8 @@ import android.widget.Toast;
 import org.example.simplemusicplayer.Model.MusicService;
 import org.example.simplemusicplayer.R;
 
+import java.util.List;
+
 import static org.example.simplemusicplayer.Model.MusicConstant.*;
 
 /**
@@ -46,6 +50,7 @@ public class MainFragment extends Fragment {
     private BroadcastReceiver m_receiver;
     private IntentFilter m_filter;
     private AlertDialog m_dialog;
+    private boolean m_runflag = false;  // サービスの起動フラグ
 
     // 初期値として表示する項目
     private String m_init_title = null;
@@ -81,6 +86,19 @@ public class MainFragment extends Fragment {
             m_init_artist = bundle.getString("artist");
             m_init_album = bundle.getString("album");
         }
+
+        // サービスが実行中か確認
+        ActivityManager am = (ActivityManager)getActivity().
+                getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningServiceInfo> services =
+                am.getRunningServices(Integer.MAX_VALUE);
+        for (ActivityManager.RunningServiceInfo info : services) {
+            Log.d(TAG, "service: " + info.service.getClassName());
+            if (info.service.getClassName().equals(MusicService.class.getName())) {
+                m_runflag = true;
+            }
+        }
+
 
         m_receiver = new BroadcastReceiver() {
             /**
@@ -299,6 +317,12 @@ public class MainFragment extends Fragment {
             if (m_init_title != null && m_init_artist != null && m_init_album != null) {
                 m_service.playSpecifiedMusic(m_init_title, m_init_artist, m_init_album);
             }
+            // すでにサービスが起動されていたら音楽情報を表示
+            else if (m_runflag) {
+                Log.d(TAG, "hoge");
+                setMusicInfo(m_service.getMusicTitle(), m_service.getMusicArtist(),
+                        m_service.getMusicAlbum());
+            }
         }
 
         /**
@@ -423,12 +447,12 @@ public class MainFragment extends Fragment {
         builder.addAction(R.drawable.ic_pause_black_24dp, "停止", null);
         builder.addAction(R.drawable.ic_skip_next_black_24dp, "次の曲", null);
 
-        int mNotificationId = 001;
+        int notification_id = 001;
 
-        NotificationManager mNotifyMgr =
+        NotificationManager manager =
                 (NotificationManager)getActivity().getSystemService(getActivity().NOTIFICATION_SERVICE);
 
-        mNotifyMgr.notify(mNotificationId, builder.build());
+        manager.notify(notification_id, builder.build());
     }
 
 }
