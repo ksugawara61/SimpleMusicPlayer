@@ -4,6 +4,7 @@ import android.app.FragmentManager;
 import android.content.Intent;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -39,8 +40,9 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);  // タイトルを非表示
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setIcon(R.drawable.ic_menu_white_24dp);
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);  // 左上メニューボタン表示
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
 
         return true;
     }
@@ -58,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG, "tap menu icon");
                 break;
 
-            case R.id.action_search:
+/*            case R.id.action_search:
                 Log.d(TAG, "tap search");
 
                 SearchFragment fragment = new SearchFragment();
