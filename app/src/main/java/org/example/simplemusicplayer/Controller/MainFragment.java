@@ -94,6 +94,8 @@ public class MainFragment extends Fragment {
                 am.getRunningServices(Integer.MAX_VALUE);
         for (ActivityManager.RunningServiceInfo info : services) {
             Log.d(TAG, "service: " + info.service.getClassName());
+
+            // サービスが実行中の場合フラグをONに変更
             if (info.service.getClassName().equals(MusicService.class.getName())) {
                 m_runflag = true;
             }
@@ -429,6 +431,7 @@ public class MainFragment extends Fragment {
         Log.d(TAG, "showNotification");
 
         Intent result_intent = new Intent(getActivity(), MainActivity.class);
+//        Intent delete_intent = new Intent(getActivity(), MainActivity.class);
 
         PendingIntent result_pending_intent = PendingIntent.getActivity(
                 getActivity(), 0, result_intent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -439,13 +442,14 @@ public class MainFragment extends Fragment {
                         .setContentTitle(title)
                         .setContentText(artist + " - " + album)
                         .setTicker(title + " - " + artist);
+//                        .setDeleteIntent(getPendingIntentWithBroadcast(NotificationReceiver.DELETE_NOTIFICATION));
 
         builder.setContentIntent(result_pending_intent);
 
         // アクションボタンを追加
-        builder.addAction(R.drawable.ic_skip_previous_black_24dp, "前の曲", null);
-        builder.addAction(R.drawable.ic_pause_black_24dp, "停止", null);
-        builder.addAction(R.drawable.ic_skip_next_black_24dp, "次の曲", null);
+//        builder.addAction(R.drawable.ic_skip_previous_black_24dp, "前の曲", null);
+//        builder.addAction(R.drawable.ic_pause_black_24dp, "停止", null);
+//        builder.addAction(R.drawable.ic_skip_next_black_24dp, "次の曲", null);
 
         int notification_id = 001;
 
@@ -455,4 +459,37 @@ public class MainFragment extends Fragment {
         manager.notify(notification_id, builder.build());
     }
 
+    /*private PendingIntent getPendingIntentWithBroadcast(String action) {
+        return PendingIntent.getBroadcast(getActivity(), 0 , new Intent(action), 0);
+    }
+
+    public class NotificationReceiver extends BroadcastReceiver{
+
+        //MainActivity側からも参照されるのでpublic
+        public static final String CLICK_NOTIFICATION = "click_notification";
+        public static final String DELETE_NOTIFICATION = "delete_notification";
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            String action = intent.getAction();
+
+            switch (action) {
+                case CLICK_NOTIFICATION:
+                    //通知タップ時のイベントを書く
+                    Toast.makeText(context, "通知がタップされました", Toast.LENGTH_SHORT).show();
+                    break;
+
+                case DELETE_NOTIFICATION:
+                    //通知削除時のイベントを書く
+                    Toast.makeText(context, "通知が削除されました", Toast.LENGTH_SHORT).show();
+                    break;
+
+                default:
+                    break;
+            }
+        }
+    }
+
+    */
 }
