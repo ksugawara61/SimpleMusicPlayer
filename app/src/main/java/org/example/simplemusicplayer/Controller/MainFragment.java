@@ -273,7 +273,7 @@ public class MainFragment extends Fragment {
                 // ループボタン押下時の処理
                 case R.id.loop_button:
                     Log.d(TAG, "push loop button");
-                    if (m_service.setRoopMusic()) {
+                    if (m_service.setLoopMusic()) {
                         m_loop_button.setImageResource(R.drawable.ic_repeat_black_24dp);
                         Toast.makeText(getContext(), "ループをONに設定しました", Toast.LENGTH_SHORT).show();
                     }
@@ -321,9 +321,7 @@ public class MainFragment extends Fragment {
             }
             // すでにサービスが起動されていたら音楽情報を表示
             else if (m_runflag) {
-                Log.d(TAG, "hoge");
-                setMusicInfo(m_service.getMusicTitle(), m_service.getMusicArtist(),
-                        m_service.getMusicAlbum());
+                setMusicInfo();
             }
         }
 
@@ -372,7 +370,7 @@ public class MainFragment extends Fragment {
                 String title = m_service.getMusicTitle();
                 String artist = m_service.getMusicArtist();
                 String album = m_service.getMusicAlbum();
-                setMusicInfo(title, artist, album);
+                setMusicInfo();
                 showNotification(title, artist, album);
                 break;
 
@@ -392,11 +390,8 @@ public class MainFragment extends Fragment {
 
     /**
      * 音楽ファイルの情報をレイアウトに反映
-     * @param title  音楽タイトル
-     * @param artist アーティスト名
-     * @param album  アルバム名
      */
-    private void setMusicInfo(String title, String artist, String album) {
+    private void setMusicInfo() {
         Log.d(TAG, "setMusicInfo");
 
         // サムネイル画像を設定
@@ -419,6 +414,23 @@ public class MainFragment extends Fragment {
 
         // 再生ボタンを変更
         m_play_button.setImageResource(R.drawable.ic_pause_black_24dp);
+
+        // ループボタンの画像を設定
+        if (m_service.getLoopMusic()) {
+            m_loop_button.setImageResource(R.drawable.ic_repeat_black_24dp);
+        }
+        else {
+            m_loop_button.setImageResource(R.drawable.ic_repeat_white_24dp);
+        }
+
+        // シャッフルボタンの画像を設定
+        if (m_service.getSheffleMusic()) {
+            m_shuffle_button.setImageResource(R.drawable.ic_shuffle_black_24dp);
+        }
+        else {
+            m_shuffle_button.setImageResource(R.drawable.ic_shuffle_white_24dp);
+        }
+
     }
 
     /**

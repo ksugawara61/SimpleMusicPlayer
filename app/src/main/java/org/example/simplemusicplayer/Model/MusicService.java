@@ -47,7 +47,7 @@ public class MusicService extends Service
     private String m_album = "No album";
     private String m_path = null;
     private boolean m_runflag = false;  // 実行可能かどうかを判定するフラグ
-    private boolean m_roopflag = false; // ループフラグ
+    private boolean m_loopflag = false; // ループフラグ
     private boolean m_shuffleflag = false;  // シャッフルフラグ
 
     /**
@@ -117,7 +117,7 @@ public class MusicService extends Service
         Log.d(TAG, "onCompletion");
 
         // ループフラグがtrueのとき同じ曲を連続して再生
-        if (m_roopflag) {
+        if (m_loopflag) {
             createMusic();
         }
         // ループフラグがfalseのとき次の曲を再生
@@ -156,6 +156,22 @@ public class MusicService extends Service
      */
     public String getMusicPath() {
         return m_path;
+    }
+
+    /**
+     * 音楽のループ設定の状態を取得
+     * @return m_loopflag ループの状態
+     */
+    public boolean getLoopMusic() {
+        return m_loopflag;
+    }
+
+    /**
+     * 音楽のシャッフルの状態を取得
+     * @return m_shuffleflag シャッフルの状態
+     */
+    public boolean getSheffleMusic() {
+        return m_shuffleflag;
     }
 
     /**
@@ -260,12 +276,12 @@ public class MusicService extends Service
 
     /**
      * 音楽のループのON・OFFを制御
-     * @return m_roopflag  ループのON・OFF
+     * @return m_loopflag  ループのON・OFF
      */
-    public boolean setRoopMusic() {
+    public boolean setLoopMusic() {
         Log.i(TAG, "setRoopMusic");
-        m_roopflag = !m_roopflag;
-        return m_roopflag;
+        m_loopflag = !m_loopflag;
+        return m_loopflag;
     }
 
     /**
