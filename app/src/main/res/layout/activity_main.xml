@@ -1,18 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".Controller.MainActivity">
+    android:layout_height="match_parent" >
 
-    <fragment
-        android:id="@+id/main_fragment"
-        class="org.example.simplemusicplayer.Controller.MainFragment"
+    <!-- コンテンツ -->
+    <LinearLayout
+        xmlns:tools="http://schemas.android.com/tools"
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="center"
-        tools:layout="@layout/fragment_main" />
+        tools:context=".Controller.MainActivity" >
 
+        <fragment
+            android:id="@+id/main_fragment"
+            class="org.example.simplemusicplayer.Controller.MainFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            tools:layout="@layout/fragment_main" />
 
-</FrameLayout>
+    </LinearLayout>
+
+    <!-- ドロワー部分 -->
+    <LinearLayout
+        android:id="@+id/drawer"
+        android:layout_width="240dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="left" >
+
+        <!-- ここではFragmentをセットするためのLayoutをいれてみる -->
+
+        <LinearLayout
+            android:id="@+id/fragmentMenu"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#FFFFFF"
+            android:orientation="vertical" />
+    </LinearLayout>
+
+</android.support.v4.widget.DrawerLayout>

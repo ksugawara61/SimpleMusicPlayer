@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.media.MediaMetadataRetriever;
+import android.os.Environment;
 import android.util.Log;
 
 import java.io.File;
@@ -49,10 +50,13 @@ public class MusicDBAdapter {
 
     /**
      * 音楽ファイルの情報をデータベースに格納
+     * TODO 音楽ファイルのパスをユーザ設定できるように変更
      */
     public void insertMusic() {
-        Log.d(TAG, "insertMusic");
-        File test = new File("/storage/sdcard1/music");
+        // TODO 外部SDカードのフォルダパスを取得するメソッドを追加（一旦自分の端末のみ対応）
+        String path = "/storage/3636-3730";
+        Log.d(TAG, "insertMusic: " + path);
+        File test = new File(path);
         List<File> music = searchMusicFiles(test);
         insertMusicFiles(music);
     }
@@ -75,7 +79,7 @@ public class MusicDBAdapter {
      * @return 音楽ファイル一覧
      */
     private List<File> searchMusicFiles(File root) {
-        Log.d(TAG, "searchMusicFiles");
+        Log.d(TAG, "searchMusicFiles: " + root.getPath());
         // ルートディレクトリ配下の音楽ファイル
         List<File> music = new ArrayList<File>();
         music.addAll(Arrays.asList(root.listFiles(new MusicFileFilter())));

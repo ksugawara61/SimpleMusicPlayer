@@ -1,9 +1,14 @@
 package org.example.simplemusicplayer.Controller;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
 import org.example.simplemusicplayer.Model.MusicDBAdapter;
@@ -51,16 +56,28 @@ public class SettingFragment extends PreferenceFragment
             case "folder_scan":
                 Log.d(TAG, "click folder_scan");
 
-                // プログレスダイアログを表示
-                m_progress = new ProgressDialog(getActivity());
-                m_progress.setIndeterminate(true);
-                m_progress.setMessage("Loading...");
-                m_progress.setCancelable(false);  // 戻るボタンを無効化
-                m_progress.show();
+                // Android 6.0対応用に外部ストレージへのアクセスが許可されているか確認
+                // TODO とりあえず雑に Android 6.0に対応するように修正したのであとで直す
+                Activity activity = getActivity();
+                if (ContextCompat.checkSelfPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE)
+                        == PackageManager.PERMISSION_GRANTED) {
+                    // プログレスダイアログを表示
+                    m_progress = new ProgressDialog(getActivity());
+                    m_progress.setIndeterminate(true);
+                    m_progress.setMessage("Loading...");
+                    m_progress.setCancelable(false);  // 戻るボタンを無効化
+                    m_progress.show();
 
-                // DBの更新処理の時間がかかるためスレッドで呼び出す
-                m_thread = new Thread(this);
-                m_thread.start();
+                    // DBの更新処理の時間がかかるためスレッドで呼び出す
+                    m_thread = new Thread(this);
+                    m_thread.start();
+                }
+                // 許可されていない場合にダイヤログを表示
+                else {
+                    //まだ許可を求める前の時、許可を求めるダイアログを表示します。
+                    ActivityCompat.requestPermissions(activity,
+                            new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 0);
+                }
 
                 return true;
             // スキャンするフォルダパスの設定
@@ -79,9 +96,11 @@ public class SettingFragment extends PreferenceFragment
      */
     @Override
     public void run() {
+        Activity activity = getActivity();
+
         // DBの更新処理
-        getActivity().deleteDatabase(DB_NAME);
-        MusicDBAdapter adapter = new MusicDBAdapter(getActivity(), DB_NAME, null, 1);
+        activity.deleteDatabase(DB_NAME);
+        MusicDBAdapter adapter = new MusicDBAdapter(activity, DB_NAME, null, 1);
         adapter.insertMusic();
 
         // プログレスダイヤログを閉じる

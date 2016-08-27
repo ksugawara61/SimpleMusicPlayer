@@ -4,14 +4,18 @@ import android.app.FragmentManager;
 import android.content.Intent;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.SearchView;
+import android.util.AndroidException;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,11 +26,55 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
+    private DrawerLayout mDrawer;
+    private ActionBarDrawerToggle mDrawerToggle;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate");
         setContentView(R.layout.activity_main);
+
+        // ホームアイコン横のHomeAsUpアイコンを有効に。HomeAsUpアイコンは後述のドロワートグルで上書き。
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
+
+        //ナビゲーションドロワーの設定
+        mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        //第三引数でHomeAsUpアイコンを指定。
+        //第四・第五引数は、String.xmlで適当な文字列を。
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawer,
+                R.string.open, R.string.close) {
+
+            //閉じた時に呼ばれる
+            @Override
+            public void onDrawerClosed(View drawerView) {
+            }
+
+            //開いた時に呼ばれる
+            @Override
+            public void onDrawerOpened(View drawerView) {
+            }
+
+            //アニメーションの処理。Overrideする場合はスーパークラスの同メソッドを呼ぶ。
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+                super.onDrawerSlide(drawerView, slideOffset);
+            }
+
+            //状態が変化した時に呼ばれる。
+            // 表示/閉じ済み -> 0
+            // ドラッグ中 -> 1
+            // ドラッグを開放た後のアニメーション中 ->2
+            @Override
+            public void onDrawerStateChanged(int newState) {
+            }
+        };
+        mDrawer.setDrawerListener(mDrawerToggle);
+
+        //ここではドロワーにMenuFragmentをセットしてみる
+        /*menuFragment = new MenuFragment();
+        getSupportFragmentManager().beginTransaction().add(R.id.fragmentMenu, menuFragment).commit();*/
     }
 
     /**
@@ -41,8 +89,10 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);  // 左上メニューボタン表示
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);  // 左上メニューボタン表示
+//        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
+
+//        DrawerLayout drawer = (DrawerLayout)findViewById(android.R.id.drawer_layout);
 
         return true;
     }

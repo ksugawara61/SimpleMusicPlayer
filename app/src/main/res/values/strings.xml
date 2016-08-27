@@ -3,6 +3,10 @@
     <string name="ok_label">OK</string>
     <string name="action_search">検索</string>
 
+    <!-- ナビゲーションドロわー -->
+    <string name="open">Open</string>
+    <string name="close">Close</string>
+
     <!-- エラー用のテキスト -->
     <string name="not_found_label">ファイルが見つかりませんでした</string>
     <string name="not_found_text">\
